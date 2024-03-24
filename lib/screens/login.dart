@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import 'package:terratreats/screens/signup.dart';
+import 'package:terratreats/utils/app_theme.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -35,6 +37,7 @@ class _LoginState extends State<Login> {
                       style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
+                        color: AppTheme.primary,
                       ),
                     ),
                     const SizedBox(
@@ -76,7 +79,8 @@ class _LoginState extends State<Login> {
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.amber,
+                          backgroundColor: AppTheme.primary,
+                          foregroundColor: AppTheme.highlight,
                         ),
                         child: const Text(
                           "Login",

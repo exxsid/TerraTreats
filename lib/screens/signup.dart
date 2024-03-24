@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:terratreats/utils/app_theme.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
@@ -9,10 +11,13 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  bool _passwordVisible = true;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
@@ -30,6 +35,7 @@ class _SignUpState extends State<SignUp> {
                       style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
+                        color: AppTheme.primary,
                       ),
                     ),
                     const SizedBox(
@@ -103,7 +109,18 @@ class _SignUpState extends State<SignUp> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Password",
+                        suffixIcon: IconButton(
+                          icon: Icon(_passwordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                        ),
                       ),
+                      obscureText: _passwordVisible,
                     ),
                     const SizedBox(
                       height: 10,
@@ -116,7 +133,8 @@ class _SignUpState extends State<SignUp> {
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.amber,
+                          backgroundColor: AppTheme.primary,
+                          foregroundColor: AppTheme.highlight,
                         ),
                         child: const Text(
                           "Sign up",
