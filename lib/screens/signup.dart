@@ -15,23 +15,26 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+          width: screenWidth,
+          height: screenHeight,
           child: Column(
             children: [
-              // login form
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
+                    // title
                     const Text(
-                      "Sign up",
+                      "Sign Up",
                       style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
@@ -41,15 +44,14 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(
                       height: 40,
                     ),
-                    // first and last name
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
                           child: TextField(
                             decoration: InputDecoration(
+                              labelText: 'First Name',
                               border: OutlineInputBorder(),
-                              labelText: "First Name",
                             ),
                           ),
                         ),
@@ -59,8 +61,8 @@ class _SignUpState extends State<SignUp> {
                         Flexible(
                           child: TextField(
                             decoration: InputDecoration(
+                              labelText: 'Last Name',
                               border: OutlineInputBorder(),
-                              labelText: "Last Name",
                             ),
                           ),
                         ),
@@ -69,7 +71,7 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextField(
+                    const TextField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Email",
@@ -78,7 +80,7 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextField(
+                    const TextField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Phone Number",
@@ -87,7 +89,7 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextField(
+                    const TextField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Address",
@@ -96,7 +98,7 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextField(
+                    const TextField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Gender",
@@ -106,13 +108,16 @@ class _SignUpState extends State<SignUp> {
                       height: 10,
                     ),
                     TextField(
+                      obscureText: _passwordVisible,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Password",
+                        border: const OutlineInputBorder(),
+                        labelText: 'Password',
                         suffixIcon: IconButton(
-                          icon: Icon(_passwordVisible
-                              ? Icons.visibility_off
-                              : Icons.visibility),
+                          icon: Icon(
+                            _passwordVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
                           onPressed: () {
                             setState(() {
                               _passwordVisible = !_passwordVisible;
@@ -120,10 +125,6 @@ class _SignUpState extends State<SignUp> {
                           },
                         ),
                       ),
-                      obscureText: _passwordVisible,
-                    ),
-                    const SizedBox(
-                      height: 10,
                     ),
                     const SizedBox(
                       height: 40,
@@ -155,7 +156,7 @@ class _SignUpState extends State<SignUp> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text("Have an account? Login"),
+                  child: const Text("Have an account? Login"),
                 ),
               )
             ],
