@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:terratreats/screens/otp.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
 
@@ -132,7 +132,13 @@ class _SignUpState extends State<SignUp> {
                     Container(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => const OTPScreen()),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.primary,
                           foregroundColor: AppTheme.highlight,
