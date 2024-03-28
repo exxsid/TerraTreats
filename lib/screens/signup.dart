@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:terratreats/screens/otp.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
+import 'package:terratreats/widgets/primary_button.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -129,29 +130,16 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(
                       height: 40,
                     ),
-                    Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (builder) => const OTPScreen()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: AppTheme.highlight,
-                        ),
-                        child: const Text(
-                          "Sign up",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'Montserrat',
+                    PrimaryButton(
+                      text: "Sign Up",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (builder) => const OTPScreen(),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                   ],
                 ),

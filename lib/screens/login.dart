@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:terratreats/screens/signup.dart';
 import 'package:terratreats/utils/app_theme.dart';
+import 'package:terratreats/widgets/primary_button.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -74,23 +75,9 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 40,
                     ),
-                    Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: AppTheme.highlight,
-                        ),
-                        child: const Text(
-                          "Login",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'Montserrat',
-                          ),
-                        ),
-                      ),
+                    PrimaryButton(
+                      text: "Login",
+                      onPressed: () {},
                     ),
                   ],
                 ),

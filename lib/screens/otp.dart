@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
+import 'package:terratreats/widgets/primary_button.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
@@ -49,23 +50,9 @@ class _OTPScreenState extends State<OTPScreen> {
               const SizedBox(
                 height: 10,
               ),
-              Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primary,
-                    foregroundColor: AppTheme.highlight,
-                  ),
-                  child: const Text(
-                    "Verify",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      fontFamily: 'Montserrat',
-                    ),
-                  ),
-                ),
+              PrimaryButton(
+                text: "Verify",
+                onPressed: () {},
               ),
             ],
           ),
