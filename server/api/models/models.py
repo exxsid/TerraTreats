@@ -79,3 +79,14 @@ class Product(Base):
 
     def __repr__(self) -> str:
         return f"Product(product_id={self.product_id}, product_name={self.product_name}, description={self.description}, price={self.price}, stock={self.stock}, image_url={self.image_url}, category_id={self.category_id}, user_id={self.user_id})"
+
+
+class Order(Base):
+    __tablename__ = 'orders'
+
+    order_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    shipping_fee: Mapped[float] = mapped_column(Float())
+
+    def __repr__(self) -> str:
+        return f"Order(order_id={self.order_id}, user_id={self.user_id}, shipping_fee={self.shipping_fee})"
