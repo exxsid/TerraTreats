@@ -36,3 +36,17 @@ class Address(Base):
 
     def __repr__(self) -> str:
         return f"Address(id={self.id}, stree={self.street}, barangay={self.barangay}, city={self.city}, province={self.province}, postal_code={self.postal_code}, user_id={self.user_id})"
+
+
+class Seller(Base):
+    __tablename__ = 'sellers'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    description: Mapped[str] = mapped_column(String())
+    is_verified: Mapped[bool] = mapped_column(Boolean(), default=False)
+    verification_url: Mapped[str] = mapped_column(String(), nullable=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey('users.id'), nullable=False)
+
+    def __repr__(self) -> str:
+        return f"Seller(id={self.id}, description={self.description}, is_verified={self.is_verified}, verification_url={self.verification_url}, user_id={self.user_id})"
