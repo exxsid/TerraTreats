@@ -1,5 +1,5 @@
 from typing import List, Optional
-from sqlalchemy import ForeignKey, String, Integer, Enum, Boolean
+from sqlalchemy import ForeignKey, String, Integer, Enum, Boolean, Float
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -61,3 +61,21 @@ class Category(Base):
 
     def __repr__(self) -> str:
         return f"Category(category_id={self.category_id}, category_name={self.category_name})"
+
+
+class Product(Base):
+    __tablename__ = 'products'
+
+    product_id: Mapped[int] = mapped_column(
+        primary_key=True, autoincrement=True)
+    product_name: Mapped[int] = mapped_column(String())
+    description: Mapped[str] = mapped_column(String())
+    price: Mapped[float] = mapped_column(Float())
+    stock: Mapped[int] = mapped_column(Integer())
+    image_url: Mapped[str] = mapped_column(String())
+    category_id: Mapped[int] = mapped_column(
+        ForeignKey('categories.category_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+
+    def __repr__(self) -> str:
+        return f"Product(product_id={self.product_id}, product_name={self.product_name}, description={self.description}, price={self.price}, stock={self.stock}, image_url={self.image_url}, category_id={self.category_id}, user_id={self.user_id})"
