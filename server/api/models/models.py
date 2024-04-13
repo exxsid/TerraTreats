@@ -90,3 +90,16 @@ class Order(Base):
 
     def __repr__(self) -> str:
         return f"Order(order_id={self.order_id}, user_id={self.user_id}, shipping_fee={self.shipping_fee})"
+
+
+class OrderItem(Base):
+    __tablename__ = 'order_items'
+
+    order_item_id: Mapped[int] = mapped_column(
+        primary_key=True, autoincrement=True)
+    order_id: Mapped[int] = mapped_column(ForeignKey("orders.order_id"))
+    prodcut_id: Mapped[int] = mapped_column(ForeignKey("products.product_id"))
+    quantity: Mapped[int] = mapped_column(Integer())
+
+    def __repr__(self) -> str:
+        return f"OrderItem(order_item_id={self.order_item_id}, order_id={self.order_id}, product_id={self.product_id}, quantity={self.quantity})"
