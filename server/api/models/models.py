@@ -1,6 +1,7 @@
 from typing import List, Optional
-from sqlalchemy import ForeignKey, String, Integer, Enum, Boolean, Float
+from sqlalchemy import ForeignKey, String, Integer, Enum, Boolean, Float, DateTime
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
 
 
 class Base(DeclarativeBase):
@@ -103,3 +104,22 @@ class OrderItem(Base):
 
     def __repr__(self) -> str:
         return f"OrderItem(order_item_id={self.order_item_id}, order_id={self.order_id}, product_id={self.product_id}, quantity={self.quantity})"
+
+
+class Review(Base):
+    __tablename__ = 'reviews'
+
+    review_id: Mapped[int] = mapped_column(
+        primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.product_id"))
+    rating: Mapped[int] = mapped_column(Integer())
+    title: Mapped[str] = mapped_column(String(), nullable=True)
+    message: Mapped[str] = mapped_column(String())
+    created_at: Mapped[DateTime] = mapped_column(
+        DateTime(), server_default=func.now())
+    update_at: Mapped[DateTime] = mapped_column(
+        DateTime(), server_onupdate=func.now())
+
+    def __repr__(self) -> str:
+        return f"Review(review_id={self.review_id}, user_id={self.user_id}, product_id={self.product_id}, rating={self.rating}, title={self.title}, message={self.message}, created_at={self.created_at}, update_at={self.update_at})"
