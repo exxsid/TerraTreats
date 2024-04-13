@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:terratreats/screens/bottom_navbar.dart';
 
 import 'package:terratreats/screens/login.dart';
 
@@ -35,6 +36,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Login();
+    return const BottomNavBar();
   }
 }
