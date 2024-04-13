@@ -50,3 +50,14 @@ class Seller(Base):
 
     def __repr__(self) -> str:
         return f"Seller(id={self.id}, description={self.description}, is_verified={self.is_verified}, verification_url={self.verification_url}, user_id={self.user_id})"
+
+
+class Category(Base):
+    __tablename__ = 'categories'
+
+    category_id: Mapped[int] = mapped_column(
+        primary_key=True, autoincrement=True)
+    category_name: Mapped[str] = mapped_column(String(100), nullable=False)
+
+    def __repr__(self) -> str:
+        return f"Category(category_id={self.category_id}, category_name={self.category_name})"
