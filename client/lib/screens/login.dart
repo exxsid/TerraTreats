@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:terratreats/screens/bottom_navbar.dart';
 
 import 'package:terratreats/screens/signup.dart';
 import 'package:terratreats/utils/app_theme.dart';
@@ -77,7 +78,17 @@ class _LoginState extends State<Login> {
                     ),
                     PrimaryButton(
                       text: "Login",
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              print("login pressed");
+                              return const BottomNavBar();
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
