@@ -1,22 +1,24 @@
-// ignore_for_file: avoid_unnecessary_containers
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:terratreats/screens/bottom_navbar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:terratreats/riverpod/authentication.dart';
 
+import 'package:terratreats/screens/bottom_navbar.dart';
 import 'package:terratreats/screens/signup.dart';
 import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/primary_button.dart';
 
-class Login extends StatefulWidget {
+class Login extends ConsumerStatefulWidget {
   const Login({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends ConsumerState<Login> {
   bool _passwordVisible = true;
+
+  final _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +47,16 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 40,
                     ),
-                    const TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Email',
-                      ),
-                    ),
+                    TextField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Email',
+                        ),
+                        controller: _emailController,
+                        onChanged: (value) {
+                          ref.read(loginNotifierProvider.notifier).email =
+                              value;
+                        }),
                     const SizedBox(
                       height: 20,
                     ),
@@ -72,6 +78,10 @@ class _LoginState extends State<Login> {
                           },
                         ),
                       ),
+                      onChanged: (value) {
+                        ref.read(loginNotifierProvider.notifier).password =
+                            value;
+                      },
                     ),
                     const SizedBox(
                       height: 40,

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:terratreats/screens/bottom_navbar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:terratreats/screens/bottom_navbar.dart';
 import 'package:terratreats/screens/login.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

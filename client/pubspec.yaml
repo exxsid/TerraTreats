@@ -38,6 +38,7 @@ dependencies:
   auto_size_text: ^3.0.0
   icons_plus: ^5.0.0
   ionicons: ^0.2.2
+  flutter_riverpod: ^2.5.1
 
 dev_dependencies:
   flutter_test:
