@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:terratreats/riverpod/authentication.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:terratreats/screens/bottom_navbar.dart';
 import 'package:terratreats/screens/signup.dart';
 import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/primary_button.dart';
+import 'package:terratreats/services/authentication/auth_service.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({super.key});
@@ -19,6 +21,14 @@ class _LoginState extends ConsumerState<Login> {
   bool _passwordVisible = true;
 
   final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    final email = ref.watch(loginNotifierProvider).email;
+    final password = ref.watch(loginNotifierProvider).password;
+    final token = await AuthService().login(email, password);
+    print(token);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +58,15 @@ class _LoginState extends ConsumerState<Login> {
                       height: 40,
                     ),
                     TextField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Email',
-                        ),
-                        controller: _emailController,
-                        onChanged: (value) {
-                          ref.read(loginNotifierProvider.notifier).email =
-                              value;
-                        }),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Email',
+                      ),
+                      onChanged: (value) {
+                        ref.read(loginNotifierProvider.notifier).email = value;
+                      },
+                      controller: _emailController,
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -82,22 +92,32 @@ class _LoginState extends ConsumerState<Login> {
                         ref.read(loginNotifierProvider.notifier).password =
                             value;
                       },
+                      controller: _passwordController,
                     ),
                     const SizedBox(
                       height: 40,
                     ),
                     PrimaryButton(
                       text: "Login",
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              print("login pressed");
-                              return const BottomNavBar();
-                            },
-                          ),
-                        );
+                      onPressed: () async {
+                        try {
+                          await _login();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                print("login pressed");
+                                return const BottomNavBar();
+                              },
+                            ),
+                          );
+                        } on Exception {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return failedLoginAlertDialog();
+                              });
+                        }
                       },
                     ),
                   ],
@@ -121,6 +141,27 @@ class _LoginState extends ConsumerState<Login> {
           ),
         ),
       ),
+    );
+  }
+
+  AlertDialog failedLoginAlertDialog() {
+    return AlertDialog(
+      title: const Text("Faild Login"),
+      content: const SingleChildScrollView(
+        child: ListBody(
+          children: [
+            Text('Wrong email or password'),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          child: const Text("Ok"),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }
