@@ -3,6 +3,7 @@ import 'package:terratreats/screens/otp.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/primary_button.dart';
+import 'package:terratreats/screens/address_signup_screen.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -90,15 +91,7 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Address",
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    // TODO convert gender textfield to combobox
                     const TextField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -131,12 +124,12 @@ class _SignUpState extends State<SignUp> {
                       height: 40,
                     ),
                     PrimaryButton(
-                      text: "Sign Up",
+                      text: "Next",
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (builder) => const OTPScreen(),
+                            builder: (builder) => const AddressSignup(),
                           ),
                         );
                       },
