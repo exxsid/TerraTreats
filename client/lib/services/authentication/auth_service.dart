@@ -22,7 +22,11 @@ class AuthService {
       ),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 404) {
+      throw Exception("Wrong email or password");
+    }
+
+    if (response.statusCode == 201) {
       return LoginModel.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
     } else {
