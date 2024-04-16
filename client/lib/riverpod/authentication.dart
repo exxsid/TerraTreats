@@ -11,6 +11,19 @@ class LoginNotifier extends ChangeNotifier {
   }
 }
 
+class SignUpNotifier extends ChangeNotifier {
+  String firstName = "";
+  String lastName = "";
+  String email = "";
+  String phoneNumber = "";
+  String gender = "";
+  String password = "";
+}
+
 final loginNotifierProvider = ChangeNotifierProvider((ref) {
   return LoginNotifier();
+});
+
+final signupNotifierProvider = ChangeNotifierProvider((ref) {
+  return SignUpNotifier();
 });

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:terratreats/riverpod/authentication.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/primary_button.dart';
@@ -8,14 +10,14 @@ import 'package:terratreats/screens/address_signup_screen.dart';
 // gender
 final List<String> _genders = <String>["Male", "Female"];
 
-class SignUp extends StatefulWidget {
+class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  ConsumerState<SignUp> createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpState extends ConsumerState<SignUp> {
   bool _passwordVisible = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -32,7 +34,7 @@ class _SignUpState extends State<SignUp> {
       return "This field is required";
     }
 
-    if (!EmailValidator.validate(value!)) {
+    if (!EmailValidator.validate(value)) {
       return "Wrong email format.";
     }
 
@@ -93,6 +95,11 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               ),
                               validator: _validateInput,
+                              onChanged: (value) {
+                                ref
+                                    .read(signupNotifierProvider.notifier)
+                                    .firstName = value;
+                              },
                             ),
                           ),
                           SizedBox(
@@ -113,6 +120,11 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               ),
                               validator: _validateInput,
+                              onChanged: (value) {
+                                ref
+                                    .read(signupNotifierProvider.notifier)
+                                    .lastName = value;
+                              },
                             ),
                           ),
                         ],
@@ -134,6 +146,10 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                         validator: _emailValidate,
+                        onChanged: (value) {
+                          ref.read(signupNotifierProvider.notifier).email =
+                              value;
+                        },
                       ),
                       const SizedBox(
                         height: 10,
@@ -152,6 +168,11 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                         validator: _validateInput,
+                        onChanged: (value) {
+                          ref
+                              .read(signupNotifierProvider.notifier)
+                              .phoneNumber = value;
+                        },
                       ),
                       const SizedBox(
                         height: 10,
@@ -162,6 +183,8 @@ class _SignUpState extends State<SignUp> {
                           setState(() {
                             _genderValue = value!;
                           });
+                          ref.read(signupNotifierProvider.notifier).gender =
+                              value!;
                         },
                         items: _genders
                             .map<DropdownMenuItem<String>>((String value) {
@@ -202,6 +225,10 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                         validator: _validateInput,
+                        onChanged: (value) {
+                          ref.read(signupNotifierProvider.notifier).password =
+                              value;
+                        },
                       ),
                       const SizedBox(
                         height: 40,
