@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:terratreats/screens/otp.dart';
+import 'package:email_validator/email_validator.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/primary_button.dart';
 import 'package:terratreats/screens/address_signup_screen.dart';
+
+// gender
+final List<String> _genders = <String>["Male", "Female"];
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -15,138 +18,222 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   bool _passwordVisible = true;
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  String? _validateInput(String? value) {
+    if (value!.isEmpty) {
+      return "This field is required";
+    }
+    return null;
+  }
+
+  String? _emailValidate(String? value) {
+    if (value!.isEmpty) {
+      return "This field is required";
+    }
+
+    if (!EmailValidator.validate(value!)) {
+      return "Wrong email format.";
+    }
+
+    return null;
+  }
+
+  String _genderValue = _genders.first;
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          width: screenWidth,
-          height: screenHeight,
-          child: Column(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // title
-                    const Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.primary,
+        child: Form(
+          key: _formKey,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
+            width: screenWidth,
+            height: screenHeight,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // title
+                      const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.primary,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              labelText: 'First Name',
-                              border: OutlineInputBorder(),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'First Name',
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                              ),
+                              validator: _validateInput,
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              labelText: 'Last Name',
-                              border: OutlineInputBorder(),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'Last Name',
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                              ),
+                              validator: _validateInput,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Email",
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Phone Number",
+                      const SizedBox(
+                        height: 10,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    // TODO convert gender textfield to combobox
-                    const TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Gender",
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextField(
-                      obscureText: _passwordVisible,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: 'Password',
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _passwordVisible
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Email",
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.grey),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _passwordVisible = !_passwordVisible;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    PrimaryButton(
-                      text: "Next",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (builder) => const AddressSignup(),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.red),
                           ),
-                        );
-                      },
-                    ),
-                  ],
+                        ),
+                        validator: _emailValidate,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Phone Number",
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                        ),
+                        validator: _validateInput,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      DropdownButton(
+                        value: _genderValue,
+                        onChanged: (value) {
+                          setState(() {
+                            _genderValue = value!;
+                          });
+                        },
+                        items: _genders
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        isExpanded: true,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        obscureText: _passwordVisible,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                        ),
+                        validator: _validateInput,
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      PrimaryButton(
+                        text: "Next",
+                        onPressed: () {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (builder) => const AddressSignup(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              // navigate to login screen
-              Container(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Have an account? Login"),
-                ),
-              )
-            ],
+                // navigate to login screen
+                Container(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Have an account? Login"),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
