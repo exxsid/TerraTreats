@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:terratreats/riverpod/authentication.dart';
 import 'package:http/http.dart' as http;
+import 'package:email_validator/email_validator.dart';
 
 import 'package:terratreats/screens/bottom_navbar.dart';
 import 'package:terratreats/screens/signup.dart';
@@ -31,6 +32,8 @@ class _LoginState extends ConsumerState<Login> {
     print(token);
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,119 +45,157 @@ class _LoginState extends ConsumerState<Login> {
               ? Center(
                   child: CircularProgressIndicator(),
                 )
-              : Column(
-                  children: [
-                    // login form
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Title
-                          const Text(
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.primary,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          TextField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Email',
-                            ),
-                            onChanged: (value) {
-                              ref.read(loginNotifierProvider.notifier).email =
-                                  value;
-                            },
-                            controller: _emailController,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          TextField(
-                            obscureText: _passwordVisible,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Password',
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _passwordVisible
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _passwordVisible = !_passwordVisible;
-                                  });
-                                },
+              : Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      // login form
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Title
+                            const Text(
+                              "Login",
+                              style: TextStyle(
+                                fontSize: 50,
+                                fontWeight: FontWeight.bold,
+                                color: AppTheme.primary,
                               ),
                             ),
-                            onChanged: (value) {
-                              ref
-                                  .read(loginNotifierProvider.notifier)
-                                  .password = value;
-                            },
-                            controller: _passwordController,
-                          ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          PrimaryButton(
-                            text: "Login",
-                            onPressed: () async {
-                              try {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                await _login();
-                                setState(() {
-                                  _isLoading = false;
-                                });
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      print("login pressed");
-                                      return const BottomNavBar();
-                                    },
-                                  ),
-                                );
-                              } on Exception catch (ex) {
-                                setState(() {
-                                  _isLoading = false;
-                                });
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return failedLoginAlertDialog(
-                                          ex.toString());
-                                    });
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    // navigate to signup screen
-                    Container(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SignUp(),
+                            const SizedBox(
+                              height: 40,
                             ),
-                          );
-                        },
-                        child: Text("Don't have an accout? Sign up"),
+                            TextFormField(
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Email',
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(color: Colors.grey),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(color: Colors.red),
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  ref
+                                      .read(loginNotifierProvider.notifier)
+                                      .email = value;
+                                },
+                                controller: _emailController,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "This field is required";
+                                  }
+                                  if (!EmailValidator.validate(value)) {
+                                    return "Wrong email format";
+                                  }
+
+                                  return null;
+                                }),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              obscureText: _passwordVisible,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Password',
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _passwordVisible
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _passwordVisible = !_passwordVisible;
+                                    });
+                                  },
+                                ),
+                              ),
+                              onChanged: (value) {
+                                ref
+                                    .read(loginNotifierProvider.notifier)
+                                    .password = value;
+                              },
+                              controller: _passwordController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "This field is required.";
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            PrimaryButton(
+                              text: "Login",
+                              onPressed: () async {
+                                if (!_formKey.currentState!.validate()) {
+                                  return;
+                                }
+                                try {
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
+                                  await _login();
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        print("login pressed");
+                                        return const BottomNavBar();
+                                      },
+                                    ),
+                                  );
+                                } on Exception catch (ex) {
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return failedLoginAlertDialog(
+                                            ex.toString());
+                                      });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    )
-                  ],
+                      // navigate to signup screen
+                      Container(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SignUp(),
+                              ),
+                            );
+                          },
+                          child: Text("Don't have an accout? Sign up"),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
         ),
       ),
