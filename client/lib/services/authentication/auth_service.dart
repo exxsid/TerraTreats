@@ -72,8 +72,7 @@ class AuthService {
     }
 
     if (response.statusCode == 201) {
-      Future<bool> temp = true as Future<bool>;
-      return temp;
+      return true;
     } else {
       throw Exception("Failed to signup.");
     }

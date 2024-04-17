@@ -16,7 +16,6 @@ class SignUpNotifier extends ChangeNotifier {
   String lastName = "";
   String email = "";
   String phoneNumber = "";
-  String gender = "";
   String password = "";
   String street = "";
   String barangay = "";
