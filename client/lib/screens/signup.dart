@@ -7,9 +7,6 @@ import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/primary_button.dart';
 import 'package:terratreats/screens/address_signup_screen.dart';
 
-// gender
-final List<String> _genders = <String>["Male", "Female"];
-
 class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
 
@@ -40,8 +37,6 @@ class _SignUpState extends ConsumerState<SignUp> {
 
     return null;
   }
-
-  String _genderValue = _genders.first;
 
   @override
   Widget build(BuildContext context) {
@@ -173,27 +168,6 @@ class _SignUpState extends ConsumerState<SignUp> {
                               .read(signupNotifierProvider.notifier)
                               .phoneNumber = value;
                         },
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      DropdownButton(
-                        value: _genderValue,
-                        onChanged: (value) {
-                          setState(() {
-                            _genderValue = value!;
-                          });
-                          ref.read(signupNotifierProvider.notifier).gender =
-                              value!;
-                        },
-                        items: _genders
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        isExpanded: true,
                       ),
                       const SizedBox(
                         height: 10,
