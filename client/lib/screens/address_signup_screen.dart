@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/primary_button.dart';
 import 'package:terratreats/screens/otp.dart';
+import 'package:terratreats/riverpod/authentication.dart';
 
 class AddressSignup extends ConsumerStatefulWidget {
   const AddressSignup({super.key});
@@ -52,7 +53,7 @@ class _AddressSignupState extends ConsumerState<AddressSignup> {
                 const SizedBox(
                   height: 40,
                 ),
-                const TextField(
+                TextField(
                   textAlign: TextAlign.center,
                   obscureText: true,
                   decoration: InputDecoration(
@@ -62,6 +63,9 @@ class _AddressSignupState extends ConsumerState<AddressSignup> {
                     ),
                     labelText: "Street",
                   ),
+                  onChanged: (value) {
+                    ref.read(signupNotifierProvider.notifier).street = value;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -82,6 +86,9 @@ class _AddressSignupState extends ConsumerState<AddressSignup> {
                     ),
                   ),
                   validator: _validateInput,
+                  onChanged: (value) {
+                    ref.read(signupNotifierProvider.notifier).barangay = value;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -102,6 +109,9 @@ class _AddressSignupState extends ConsumerState<AddressSignup> {
                     ),
                   ),
                   validator: _validateInput,
+                  onChanged: (value) {
+                    ref.read(signupNotifierProvider.notifier).city = value;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -122,6 +132,9 @@ class _AddressSignupState extends ConsumerState<AddressSignup> {
                     ),
                   ),
                   validator: _validateInput,
+                  onChanged: (value) {
+                    ref.read(signupNotifierProvider.notifier).province = value;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -142,6 +155,10 @@ class _AddressSignupState extends ConsumerState<AddressSignup> {
                     ),
                   ),
                   validator: _validateInput,
+                  onChanged: (value) {
+                    ref.read(signupNotifierProvider.notifier).postalCode =
+                        value;
+                  },
                 ),
                 const SizedBox(
                   height: 10,

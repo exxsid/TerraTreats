@@ -18,6 +18,11 @@ class SignUpNotifier extends ChangeNotifier {
   String phoneNumber = "";
   String gender = "";
   String password = "";
+  String street = "";
+  String barangay = "";
+  String city = "";
+  String province = "";
+  String postalCode = "";
 }
 
 final loginNotifierProvider = ChangeNotifierProvider((ref) {
