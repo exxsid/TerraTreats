@@ -6,11 +6,25 @@ import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/primary_button.dart';
 import 'package:terratreats/screens/otp.dart';
 
-class AddressSignup extends ConsumerWidget {
+class AddressSignup extends ConsumerStatefulWidget {
   const AddressSignup({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AddressSignup> createState() => _AddressSignupState();
+}
+
+class _AddressSignupState extends ConsumerState<AddressSignup> {
+  final _formKey = GlobalKey<FormState>();
+
+  String? _validateInput(String? value) {
+    if (value!.isEmpty) {
+      return "This field is required";
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
@@ -18,101 +32,137 @@ class AddressSignup extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //title
-              const AutoSizeText(
-                "Address",
-                maxLines: 1,
-                minFontSize: 20,
-                style: TextStyle(
-                  fontSize: 50,
-                  color: AppTheme.primary,
-                  fontWeight: FontWeight.bold,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //title
+                const AutoSizeText(
+                  "Address",
+                  maxLines: 1,
+                  minFontSize: 20,
+                  style: TextStyle(
+                    fontSize: 50,
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              const Text(
-                "* Required Fields",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 10,
+                const SizedBox(
+                  height: 40,
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const TextField(
-                textAlign: TextAlign.center,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Street",
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const TextField(
-                textAlign: TextAlign.center,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "* Barangay",
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const TextField(
-                textAlign: TextAlign.center,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "* Municipality/City",
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const TextField(
-                textAlign: TextAlign.center,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "* Province",
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const TextField(
-                textAlign: TextAlign.center,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "* Postal Code",
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              PrimaryButton(
-                text: "Sign Up",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (builder) => const OTPScreen(),
+                const TextField(
+                  textAlign: TextAlign.center,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(color: Colors.grey),
                     ),
-                  );
-                },
-              ),
-            ],
+                    labelText: "Street",
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  textAlign: TextAlign.center,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Barangay",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                  ),
+                  validator: _validateInput,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  textAlign: TextAlign.center,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Municipality/City",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                  ),
+                  validator: _validateInput,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  textAlign: TextAlign.center,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Province",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                  ),
+                  validator: _validateInput,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  textAlign: TextAlign.center,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Postal Code",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                  ),
+                  validator: _validateInput,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                PrimaryButton(
+                  text: "Sign Up",
+                  onPressed: () {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (builder) => const OTPScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
