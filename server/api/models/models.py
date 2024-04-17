@@ -87,6 +87,7 @@ class Order(Base):
 
     order_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    # TODO order status enum
     shipping_fee: Mapped[float] = mapped_column(Float())
 
     def __repr__(self) -> str:
