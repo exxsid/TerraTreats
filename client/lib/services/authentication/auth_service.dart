@@ -33,4 +33,49 @@ class AuthService {
       throw Exception("Failed to login.");
     }
   }
+
+  Future<bool> signup({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required String phonenumber,
+    String? street,
+    required String barangay,
+    required String city,
+    required String province,
+    required String postalCode,
+  }) async {
+    final uri = Uri.parse("$baseUrl/signup");
+
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        "email": email,
+        "password": password,
+        "first_name": firstName,
+        "last_name": lastName,
+        "phonenumber": phonenumber,
+        "street": street!,
+        "barangay": barangay,
+        "city": city,
+        "province": province,
+        "postal_code": postalCode
+      }),
+    );
+
+    if (response.statusCode == 400 || response.statusCode == 406) {
+      throw Exception("Failed to signup.");
+    }
+
+    if (response.statusCode == 201) {
+      Future<bool> temp = true as Future<bool>;
+      return temp;
+    } else {
+      throw Exception("Failed to signup.");
+    }
+  }
 }
