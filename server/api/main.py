@@ -31,11 +31,11 @@ async def user_login(credentials: Login):
 @app.post("/signup")
 async def user_signup(credentials: Signup):
     if credentials is None:
-        return Response(status_code=406)
+        return Response(status_code=400)
 
     result = await auth.signup_user(credentials)
     if result is False:
-        return Response(status_code=406)
+        return Response(status_code=407)
 
     content = {"message": "yehey"}
     response = JSONResponse(content=content)
