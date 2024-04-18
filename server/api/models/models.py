@@ -73,7 +73,9 @@ class Product(Base):
     description: Mapped[str] = mapped_column(String())
     price: Mapped[float] = mapped_column(Float())
     stock: Mapped[int] = mapped_column(Integer())
+    unit: Mapped[str] = mapped_column(String())
     image_url: Mapped[str] = mapped_column(String())
+    rating: Mapped[float] = mapped_column(Float(), default=0, nullable=True)
     category_id: Mapped[int] = mapped_column(
         ForeignKey('categories.category_id'))
     seller_id: Mapped[int] = mapped_column(ForeignKey(
