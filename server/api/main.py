@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 import json
 
 from utils import authentication as auth
+from utils import home_util
 from models.api_base_model import Login, Signup
 
 app = FastAPI()
@@ -41,3 +42,23 @@ async def user_signup(credentials: Signup):
     response = JSONResponse(content=content)
     response.status_code = 201
     return response
+
+
+@app.get("/category")
+async def get_categories():
+    result = await home_util.get_category()
+
+    if result is None:
+        return Response(status_code=404)
+
+    return result
+
+
+@app.get("/reco-product")
+async def get_recommended_products():
+    result = await home_util.get_recommended_products()
+
+    if result is None:
+        return Response(status_code=404)
+
+    return result
