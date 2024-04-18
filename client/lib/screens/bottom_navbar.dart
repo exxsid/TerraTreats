@@ -35,7 +35,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("TerraTreats"),
+          title: const Text(
+            "TerraTreats",
+            style: TextStyle(
+              backgroundColor: AppTheme.highlight,
+              color: AppTheme.primary,
+              fontWeight: FontWeight.w900,
+              fontSize: 30,
+            ),
+          ),
           backgroundColor: AppTheme.highlight,
         ),
         body: IndexedStack(
@@ -50,7 +58,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
               icon: Icon(Ionicons.home_outline),
               activeIcon: Icon(Ionicons.home_sharp),
               label: "Home",
-            ),BottomNavigationBarItem(
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Ionicons.chatbubble_ellipses_outline),
               activeIcon: Icon(Ionicons.chatbubble_ellipses_sharp),
               label: "Messages",
