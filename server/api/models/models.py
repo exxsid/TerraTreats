@@ -76,7 +76,8 @@ class Product(Base):
     image_url: Mapped[str] = mapped_column(String())
     category_id: Mapped[int] = mapped_column(
         ForeignKey('categories.category_id'))
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey(
+        'sellers.id', ondelete='CASCADE', onupdate='CASCADE'))
 
     def __repr__(self) -> str:
         return f"Product(product_id={self.product_id}, product_name={self.product_name}, description={self.description}, price={self.price}, stock={self.stock}, image_url={self.image_url}, category_id={self.category_id}, user_id={self.user_id})"
