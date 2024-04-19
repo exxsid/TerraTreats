@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:terratreats/riverpod/featured_notifier.dart';
+import 'package:terratreats/riverpod/selected_product_notifier.dart';
 import 'package:terratreats/screens/selected_product_screen.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
@@ -20,7 +21,7 @@ class FeaturedCard extends ConsumerWidget {
                 width: double.infinity,
                 height: 325,
                 child: Image.network(
-                  "https://res.cloudinary.com/db2ixxygt/image/upload/v1713418672/1/fwonrazdbprtuajcz4kk.jpg",
+                  ref.watch(featuredNotifierProvider).imgUrl,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -57,6 +58,9 @@ class FeaturedCard extends ConsumerWidget {
           ),
         ),
         onTap: () {
+          ref.read(selectedProductNotifierProvider.notifier).id =
+              ref.watch(featuredNotifierProvider).productId;
+
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SelectedProduct()),

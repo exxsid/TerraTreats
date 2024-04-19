@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:terratreats/models/featured_product_model.dart';
 import 'package:terratreats/riverpod/featured_notifier.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
@@ -8,6 +9,7 @@ import 'package:terratreats/widgets/category_card.dart';
 import 'package:terratreats/widgets/product_card.dart';
 import 'package:terratreats/riverpod/categorycard_notifier.dart';
 import "package:terratreats/services/recommended_product_service.dart";
+import "package:terratreats/services/featured_product_service.dart";
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -17,15 +19,19 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
-  @override
-  void initState() {
-    ref.read(featuredNotifierProvider.notifier).productName = "Ampalaya";
-    ref.read(featuredNotifierProvider.notifier).productId = 1;
-    super.initState();
+  Future<void> _fetchFeaturedProduct() async {
+    FeaturedProduct featuredProduct = await getFeaturedProduct();
+    ref.read(featuredNotifierProvider.notifier).productName =
+        featuredProduct.name;
+    ref.read(featuredNotifierProvider.notifier).productId =
+        featuredProduct.productId;
+    ref.read(featuredNotifierProvider.notifier).imgUrl = featuredProduct.imgUrl;
   }
 
   @override
   Widget build(BuildContext context) {
+    _fetchFeaturedProduct();
+
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Padding(
