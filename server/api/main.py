@@ -71,3 +71,13 @@ async def get_product_by_id(id: int):
         return Response(status_code=404)
 
     return result
+
+
+@app.get("/featured-product")
+async def get_featured_product():
+    result = await home_util.get_featured_product()
+
+    if result is None:
+        return Response(status_code=404)
+
+    return result

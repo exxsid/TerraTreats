@@ -1,5 +1,7 @@
+import random
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, select
+from sqlalchemy import func
 
 from models.models import Category, Product, Seller, User
 
@@ -54,6 +56,39 @@ async def get_product_by_id(id: int):
         result = session.execute(query)
     res = {}
     for col in result:
+        res = {
+            "productId": col[0],
+            "name": col[1],
+            "description": col[2],
+            "price": col[3],
+            "stock": col[4],
+            "unit": col[5],
+            "imgUrl": col[6],
+            "rating": col[7],
+            "category": col[8],
+            "seller": f"{col[9]} {col[10]}"
+        }
+
+    return res
+
+
+async def get_featured_product():
+    with Session(engine) as session:
+        # get the total rows of table
+        num_rows = session.query(func.count(Product.product_id)).scalar()
+
+        # Generate a random offset within the row count
+        random_offset = random.randrange(num_rows)
+
+        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name).\
+            select_from(Product).\
+            join(Category, Product.category_id == Category.category_id).\
+            join(Seller, Product.seller_id == Seller.id).\
+            join(User, Seller.user_id == User.id).\
+            offset(random_offset).limit(1)
+
+        col = session.execute(query).fetchone()
+
         res = {
             "productId": col[0],
             "name": col[1],
