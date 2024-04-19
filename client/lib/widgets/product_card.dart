@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:terratreats/riverpod/selected_product_notifier.dart";
+import "package:terratreats/screens/selected_product_screen.dart";
 import "package:terratreats/utils/app_theme.dart";
 
 class ProductCard extends ConsumerWidget {
@@ -10,6 +11,7 @@ class ProductCard extends ConsumerWidget {
   final String unit;
   final double rating;
   final String seller;
+  final String imgUrl;
   final int sold;
 
   const ProductCard({
@@ -20,6 +22,7 @@ class ProductCard extends ConsumerWidget {
     required this.unit,
     required this.rating,
     required this.seller,
+    required this.imgUrl,
     this.sold = 0,
   });
 
@@ -47,7 +50,7 @@ class ProductCard extends ConsumerWidget {
               width: double.infinity,
               height: 150,
               child: Image.network(
-                "https://res.cloudinary.com/db2ixxygt/image/upload/v1713418672/1/fwonrazdbprtuajcz4kk.jpg",
+                this.imgUrl,
                 fit: BoxFit.cover,
               ),
             ),
@@ -99,6 +102,11 @@ class ProductCard extends ConsumerWidget {
       onTap: () {
         print("product tapped ${this.id}");
         ref.read(selectedProductNotifierProvider.notifier).id = this.id;
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SelectedProduct()),
+        );
       },
     );
   }

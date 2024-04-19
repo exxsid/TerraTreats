@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:terratreats/riverpod/featured_notifier.dart';
+import 'package:terratreats/screens/selected_product_screen.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
 
@@ -56,7 +57,10 @@ class FeaturedCard extends ConsumerWidget {
           ),
         ),
         onTap: () {
-          print("Featured product tap");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SelectedProduct()),
+          );
         });
   }
 }

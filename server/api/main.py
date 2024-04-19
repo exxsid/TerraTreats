@@ -62,3 +62,12 @@ async def get_recommended_products():
         return Response(status_code=404)
 
     return result
+
+
+@app.get("/product")
+async def get_product_by_id(id: int):
+    result = await home_util.get_product_by_id(id)
+    if result is None:
+        return Response(status_code=404)
+
+    return result
