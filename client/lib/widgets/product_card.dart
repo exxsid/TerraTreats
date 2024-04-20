@@ -47,13 +47,13 @@ class ProductCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: double.infinity,
-              height: 150,
-              child: Image.network(
-                this.imgUrl,
-                fit: BoxFit.cover,
-              ),
-            ),
+                width: double.infinity,
+                height: 150,
+                child: FadeInImage(
+                  image: NetworkImage(this.imgUrl),
+                  placeholder: AssetImage("assets/images/placeholder.jpg"),
+                  fit: BoxFit.cover,
+                )),
             Text(
               this.name.toUpperCase(),
               style: TextStyle(

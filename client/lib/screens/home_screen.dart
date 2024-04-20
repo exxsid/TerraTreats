@@ -78,7 +78,9 @@ class _HomeState extends ConsumerState<Home> {
         future: getRecommendedProducts(),
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.hasError) {
-            return Text("Can't load recommended products");
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
           final recommendedProducts = snapshot.data!;
           return GridView.count(

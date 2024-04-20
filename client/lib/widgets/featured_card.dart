@@ -20,8 +20,10 @@ class FeaturedCard extends ConsumerWidget {
               Container(
                 width: double.infinity,
                 height: 325,
-                child: Image.network(
-                  ref.watch(featuredNotifierProvider).imgUrl,
+                child: FadeInImage(
+                  image:
+                      NetworkImage(ref.watch(featuredNotifierProvider).imgUrl),
+                  placeholder: AssetImage('assets/images/placeholder.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),

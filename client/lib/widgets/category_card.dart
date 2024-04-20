@@ -20,7 +20,9 @@ class CategoryCard extends ConsumerWidget {
           future: getCategory(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.hasError) {
-              return Text("Can't load categories");
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
             final categories = snapshot.data!;
             return ListView.builder(

@@ -24,7 +24,9 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
         future: getSelectedProduct(id),
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.hasError) {
-            return Text("Can't load product");
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
           final data = snapshot.data!;
@@ -35,13 +37,14 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: double.infinity,
-                      height: 400,
-                      child: Image.network(
-                        data.imgUrl,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                        width: double.infinity,
+                        height: 400,
+                        child: FadeInImage(
+                          image: NetworkImage(data.imgUrl),
+                          placeholder:
+                              AssetImage("assets/images/placeholder.jpg"),
+                          fit: BoxFit.cover,
+                        )),
                     Padding(
                       padding: EdgeInsets.all(8),
                       child: Column(
