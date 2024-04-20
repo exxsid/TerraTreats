@@ -114,30 +114,64 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                   ],
                 ),
               ),
+              // buy, add to cart and message
               Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
                 child: Container(
-                  padding: EdgeInsets.only(left: 8, right: 8),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppTheme.highlight,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 1.0,
-                        spreadRadius: 1.0,
+                        blurRadius: 5.0,
+                        spreadRadius: 5.0,
                       ),
                     ],
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     children: [
-                      IconButton(
-                          icon: Icon(Ionicons.cart_outline),
-                          onPressed: () {
-                            print("cart pressed");
-                          }),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              blurRadius: 2,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                          color: AppTheme.highlight,
+                        ),
+                        child: IconButton(
+                            icon: Icon(Ionicons.chatbubble_outline),
+                            onPressed: () {
+                              print("cart pressed");
+                            }),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              blurRadius: 2,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                          color: AppTheme.secondary,
+                        ),
+                        child: IconButton(
+                            icon: Icon(Ionicons.cart_outline),
+                            onPressed: () {
+                              print("cart pressed");
+                            }),
+                      ),
+                      SizedBox(width: 8),
                       Flexible(
                         child: PrimaryButton(
                           text: "Buy",
