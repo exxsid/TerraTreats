@@ -2,6 +2,7 @@ from typing import List, Optional
 from sqlalchemy import ForeignKey, String, Integer, Enum, Boolean, Float, DateTime
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import UUID
 
 
 class Base(DeclarativeBase):
@@ -127,3 +128,16 @@ class Review(Base):
 
     def __repr__(self) -> str:
         return f"Review(review_id={self.review_id}, user_id={self.user_id}, product_id={self.product_id}, rating={self.rating}, title={self.title}, message={self.message}, created_at={self.created_at}, update_at={self.update_at})"
+
+
+class Cart(Base):
+    __tablename__ = 'carts'
+
+    cart_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey(
+        "users.id", ondelete='CASCADE', onupdate="CASCADE"))
+    product_id: Mapped[int] = mapped_column(ForeignKey(
+        "products.product_id", ondelete='CASCADE', onupdate="CASCADE"))
+
+    def __repr__(self) -> str:
+        return f"Cart(card_id={self.cart_id}, user_id={self.user_id}, product_id={self.product_id})"
