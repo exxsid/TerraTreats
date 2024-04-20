@@ -1,8 +1,9 @@
 from typing import List, Optional
-from sqlalchemy import ForeignKey, String, Integer, Enum, Boolean, Float, DateTime
+from sqlalchemy import ForeignKey, String, Integer, Enum, Boolean, Float, DateTime, types, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 
 class Base(DeclarativeBase):
@@ -133,7 +134,11 @@ class Review(Base):
 class Cart(Base):
     __tablename__ = 'carts'
 
-    cart_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    cart_id: Mapped[uuid.UUID] = mapped_column(
+        types.Uuid,
+        primary_key=True,
+        default=text("gen_random_uuid()")
+    )
     user_id: Mapped[int] = mapped_column(ForeignKey(
         "users.id", ondelete='CASCADE', onupdate="CASCADE"))
     product_id: Mapped[int] = mapped_column(ForeignKey(

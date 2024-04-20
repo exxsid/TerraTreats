@@ -17,3 +17,8 @@ class Signup(BaseModel):
     city: str
     province: str
     postal_code: str
+
+
+class AddToCart(BaseModel):
+    user_id: int
+    product_id: int

@@ -1,10 +1,12 @@
 from fastapi import FastAPI, Response
 from fastapi.responses import JSONResponse
 import json
+from fastapi.encoders import jsonable_encoder
+import uuid
 
 from utils import authentication as auth
-from utils import home_util
-from models.api_base_model import Login, Signup
+from utils import home_util, cart_util
+from models.api_base_model import Login, Signup, AddToCart
 
 app = FastAPI()
 
@@ -79,5 +81,36 @@ async def get_featured_product():
 
     if result is None:
         return Response(status_code=404)
+
+    return result
+
+
+@app.post("/cart")
+async def add_to_cart(cart: AddToCart):
+    result = await cart_util.add_to_cart(cart)
+
+    if result is None:
+        return Response(status_code=400)
+
+    response = JSONResponse(content=jsonable_encoder(result), status_code=201)
+    return response
+
+
+@app.delete("/cart")
+async def delete_cart(id: uuid.UUID):
+    result = await cart_util.delete_cart(id)
+
+    if result is False:
+        return Response(status_code=400)
+
+    return Response(status_code=204)
+
+
+@app.get("/cart")
+async def get_cart(user_id: int):
+    result = await cart_util.get_cart(user_id)
+
+    if result is None:
+        return Response(status_code=400)
 
     return result
