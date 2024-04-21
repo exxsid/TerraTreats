@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 import uuid
 
-from models.models import Cart
+from models.models import Cart, Product, User, Seller
 from models.api_base_model import AddToCart
 
 engine = engine = create_engine('postgresql+psycopg://leo:1234@127.0.0.1:5432/terratreats',
@@ -44,6 +44,27 @@ async def delete_cart(id: uuid.UUID):
 
 async def get_cart(user_id: int):
     with Session(engine) as session:
-        result = session.query(Cart).filter(Cart.user_id == user_id).all()
+        query = select(Cart.cart_id, Cart.product_id, Product.product_name, Product.image_url, Product.price, Product.unit, User.first_name, User.last_name).\
+            select_from(Product).\
+            join(Seller, Product.seller_id == Seller.id).\
+            join(User, Seller.user_id == User.id).\
+            join(Cart, Cart.product_id == Product.product_id).\
+            where(Cart.user_id == user_id)
 
-    return result
+        result = session.execute(query)
+
+        res = []
+
+        for col in result:
+            temp = {
+                "cart_id": col[0],
+                "product_id": col[1],
+                "name": col[2],
+                "imgUrl": col[3],
+                "price": col[4],
+                "unit": col[5],
+                "seller": f"{col[6]} {col[7]}",
+            }
+            res.append(temp)
+
+    return res
