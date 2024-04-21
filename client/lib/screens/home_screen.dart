@@ -19,19 +19,8 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
-  Future<void> _fetchFeaturedProduct() async {
-    FeaturedProduct featuredProduct = await getFeaturedProduct();
-    ref.read(featuredNotifierProvider.notifier).productName =
-        featuredProduct.name;
-    ref.read(featuredNotifierProvider.notifier).productId =
-        featuredProduct.productId;
-    ref.read(featuredNotifierProvider.notifier).imgUrl = featuredProduct.imgUrl;
-  }
-
   @override
   Widget build(BuildContext context) {
-    _fetchFeaturedProduct();
-
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Padding(
@@ -39,7 +28,7 @@ class _HomeState extends ConsumerState<Home> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FeaturedCard(),
+            generateFeaturedProduct(),
             SizedBox(
               height: 24,
             ),
@@ -71,6 +60,26 @@ class _HomeState extends ConsumerState<Home> {
         ),
       ),
     );
+  }
+
+  FutureBuilder generateFeaturedProduct() {
+    return FutureBuilder(
+        future: getFeaturedProduct(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.hasError) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final featuredProduct = snapshot.data!;
+          ref.read(featuredNotifierProvider.notifier).productName =
+              featuredProduct.name;
+          ref.read(featuredNotifierProvider.notifier).productId =
+              featuredProduct.productId;
+          ref.read(featuredNotifierProvider.notifier).imgUrl =
+              featuredProduct.imgUrl;
+          return FeaturedCard();
+        });
   }
 
   FutureBuilder populateRecommendedProducts() {
