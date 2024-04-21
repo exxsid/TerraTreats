@@ -8,6 +8,8 @@ import "package:terratreats/services/selected_product_service.dart";
 import "package:ionicons/ionicons.dart";
 import "package:terratreats/widgets/primary_button.dart";
 import "package:terratreats/services/cart/cart_service.dart";
+import "package:terratreats/utils/token_util.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class SelectedProduct extends ConsumerStatefulWidget {
   const SelectedProduct({super.key});
@@ -172,7 +174,9 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                             icon: Icon(Ionicons.cart_outline),
                             onPressed: () async {
                               try {
-                                final res = await addToCart(id, 1);
+                                final userId = Token.getUserToken();
+                                print("selected $userId");
+                                final res = await addToCart(id, userId!);
                                 if (!res) {
                                   return;
                                 }

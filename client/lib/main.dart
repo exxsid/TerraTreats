@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:terratreats/screens/bottom_navbar.dart';
 import 'package:terratreats/screens/login.dart';
+import "package:terratreats/utils/token_util.dart";
 
 Future main() async {
   await dotenv.load(fileName: ".env");
+
+  await Token.init();
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -37,8 +42,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _isLoggedIn = Token.getUserToken() != null;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt('user_id');
+    _isLoggedIn = userId != null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const BottomNavBar();
+    return (_isLoggedIn ? BottomNavBar() : Login());
   }
 }

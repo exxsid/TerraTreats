@@ -2,6 +2,8 @@ import "dart:convert";
 import "package:http/http.dart" as http;
 import "package:flutter_dotenv/flutter_dotenv.dart";
 import "package:terratreats/models/auth_models.dart";
+import "package:terratreats/utils/token_util.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class AuthService {
   final baseUrl = dotenv.env["BASE_URL"];
@@ -27,6 +29,13 @@ class AuthService {
     }
 
     if (response.statusCode == 201) {
+      final userId = response.headers['set-cookie']
+          ?.split(";")[0]
+          .trim()
+          .split("=")[1]
+          .trim();
+      print("tangina dadsf${userId}afadfadsf");
+      await Token.setUserToken(int.parse(userId!));
       return LoginModel.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
     } else {
