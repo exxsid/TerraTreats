@@ -1,20 +1,22 @@
 import "package:flutter/material.dart";
 import "package:ionicons/ionicons.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "package:terratreats/screens/account_screen.dart";
 import "package:terratreats/screens/home_screen.dart";
 import "package:terratreats/screens/messages_screen.dart";
 import "package:terratreats/screens/cart_screen.dart";
 import "package:terratreats/utils/app_theme.dart";
+import "package:terratreats/riverpod/navigation_notifier.dart";
 
-class BottomNavBar extends StatefulWidget {
+class BottomNavBar extends ConsumerStatefulWidget {
   const BottomNavBar({super.key});
 
   @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
+  ConsumerState<BottomNavBar> createState() => _BottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class _BottomNavBarState extends ConsumerState<BottomNavBar> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
@@ -50,35 +52,48 @@ class _BottomNavBarState extends State<BottomNavBar> {
           index: _selectedIndex,
           children: _screens,
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: _botNavTapped,
-          currentIndex: _selectedIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Ionicons.home_outline),
-              activeIcon: Icon(Ionicons.home_sharp),
-              label: "Home",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Ionicons.chatbubble_ellipses_outline),
-              activeIcon: Icon(Ionicons.chatbubble_ellipses_sharp),
-              label: "Messages",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Ionicons.cart_outline),
-              activeIcon: Icon(Ionicons.cart_sharp),
-              label: "Cart",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Ionicons.person_outline),
-              activeIcon: Icon(Ionicons.person_sharp),
-              label: "Account",
-            ),
-          ],
-          backgroundColor: AppTheme.highlight,
-          selectedItemColor: AppTheme.primary,
-          unselectedItemColor: const Color.fromARGB(255, 80, 82, 84),
-          showUnselectedLabels: true,
+        bottomNavigationBar: Consumer(
+          builder: ((context, ref, child) {
+            return BottomNavigationBar(
+              onTap: (int index) {
+                print("index: $index");
+                setState(() {
+                  ref
+                      .read(navigationNotifierProvider.notifier)
+                      .updateNavigationIndex(index);
+                  _selectedIndex = ref.watch(navigationNotifierProvider).index;
+                });
+                print("ref: ${ref.watch(navigationNotifierProvider).index}");
+              },
+              currentIndex: ref.watch(navigationNotifierProvider).index,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Ionicons.home_outline),
+                  activeIcon: Icon(Ionicons.home_sharp),
+                  label: "Home",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Ionicons.chatbubble_ellipses_outline),
+                  activeIcon: Icon(Ionicons.chatbubble_ellipses_sharp),
+                  label: "Messages",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Ionicons.cart_outline),
+                  activeIcon: Icon(Ionicons.cart_sharp),
+                  label: "Cart",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Ionicons.person_outline),
+                  activeIcon: Icon(Ionicons.person_sharp),
+                  label: "Account",
+                ),
+              ],
+              backgroundColor: AppTheme.highlight,
+              selectedItemColor: AppTheme.primary,
+              unselectedItemColor: const Color.fromARGB(255, 80, 82, 84),
+              showUnselectedLabels: true,
+            );
+          }),
         ),
       ),
     );
