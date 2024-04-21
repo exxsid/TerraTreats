@@ -32,14 +32,21 @@ class _CartState extends State<Cart> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Expanded(child: populateCartCard()),
+            Expanded(
+              child: RefreshIndicator(
+                child: populateCartCard(),
+                onRefresh: () async {
+                  setState(() {});
+                },
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  FutureBuilder populateCartCard() {
+  Widget populateCartCard() {
     return FutureBuilder(
         future: getCarts(1),
         builder: (context, snapshot) {

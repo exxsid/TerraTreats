@@ -20,3 +20,15 @@ Future<List<dynamic>> getCarts(int userId) async {
     throw Exception("Failed to load cart.");
   }
 }
+
+Future<bool> deleteCart(String cartId) async {
+  final uri = Uri.parse("$baseUrl/cart?id=$cartId");
+
+  final response = await http.delete(uri);
+
+  if (response.statusCode == 204) {
+    return true;
+  } else {
+    throw Exception("Failed to delete cart.");
+  }
+}

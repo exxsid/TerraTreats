@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:ionicons/ionicons.dart";
 import "package:terratreats/riverpod/selected_product_notifier.dart";
 import "package:terratreats/screens/selected_product_screen.dart";
+import "package:terratreats/services/cart/cart_service.dart";
 import "package:terratreats/utils/app_theme.dart";
 
 class CartCard extends ConsumerWidget {
@@ -27,6 +28,7 @@ class CartCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    bool _isToDelete = false;
     return InkWell(
       child: Container(
         // cart card container
@@ -102,7 +104,43 @@ class CartCard extends ConsumerWidget {
             IconButton(
               color: Colors.red,
               icon: Icon(Ionicons.trash_outline),
-              onPressed: () {},
+              onPressed: () async {
+                await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Delete Cart"),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: [
+                              Text("Are you sure want to delete this cart."),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            child: const Text("Yes"),
+                            onPressed: () async {
+                              await deleteCart(this.cartId);
+                              final snackBar = SnackBar(
+                                content: Text('Deleted Successfully'),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          TextButton(
+                            child: const Text("No"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    });
+              },
             ),
           ],
         ),
