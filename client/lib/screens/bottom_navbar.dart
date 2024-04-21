@@ -35,10 +35,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          foregroundColor: AppTheme.highlight,
           title: const Text(
             "TerraTreats",
             style: TextStyle(
-              backgroundColor: AppTheme.highlight,
               color: AppTheme.primary,
               fontWeight: FontWeight.w900,
               fontSize: 30,

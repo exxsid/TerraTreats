@@ -1,4 +1,9 @@
 import "package:flutter/material.dart";
+import "package:ionicons/ionicons.dart";
+
+import "package:terratreats/utils/app_theme.dart";
+import "package:terratreats/services/cart/cart_service.dart";
+import "package:terratreats/widgets/cart_card.dart";
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -11,7 +16,53 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Cart screen"),
+      width: double.infinity,
+      height: double.infinity,
+      color: AppTheme.highlight,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Cart",
+              style: TextStyle(
+                color: AppTheme.primary,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Expanded(child: populateCartCard()),
+          ],
+        ),
+      ),
     );
+  }
+
+  FutureBuilder populateCartCard() {
+    return FutureBuilder(
+        future: getCarts(1),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.hasError) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final carts = snapshot.data!;
+          return ListView.builder(
+            itemCount: carts.length,
+            itemBuilder: (context, index) {
+              return CartCard(
+                cartId: carts[index].cartId,
+                productId: carts[index].productId,
+                name: carts[index].name,
+                imgUrl: carts[index].imgUrl,
+                price: carts[index].price,
+                unit: carts[index].unit,
+                seller: carts[index].seller,
+              );
+            },
+          );
+        });
   }
 }
