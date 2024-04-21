@@ -49,7 +49,7 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
           backgroundColor: AppTheme.highlight,
         ),
         body: IndexedStack(
-          index: _selectedIndex,
+          index: ref.watch(navigationNotifierProvider).index,
           children: _screens,
         ),
         bottomNavigationBar: Consumer(
@@ -57,12 +57,9 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
             return BottomNavigationBar(
               onTap: (int index) {
                 print("index: $index");
-                setState(() {
-                  ref
-                      .read(navigationNotifierProvider.notifier)
-                      .updateNavigationIndex(index);
-                  _selectedIndex = ref.watch(navigationNotifierProvider).index;
-                });
+                ref
+                    .read(navigationNotifierProvider.notifier)
+                    .updateNavigationIndex(index);
                 print("ref: ${ref.watch(navigationNotifierProvider).index}");
               },
               currentIndex: ref.watch(navigationNotifierProvider).index,
