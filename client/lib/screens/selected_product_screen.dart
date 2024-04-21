@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:terratreats/models/product_model.dart";
+import "package:terratreats/riverpod/navigation_notifier.dart";
 import "package:terratreats/riverpod/selected_product_notifier.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/services/selected_product_service.dart";
 import "package:ionicons/ionicons.dart";
 import "package:terratreats/widgets/primary_button.dart";
+import "package:terratreats/services/cart/cart_service.dart";
 
 class SelectedProduct extends ConsumerStatefulWidget {
   const SelectedProduct({super.key});
@@ -153,6 +155,7 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                             }),
                       ),
                       SizedBox(width: 8),
+                      // add to cart button
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
@@ -167,15 +170,56 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                         ),
                         child: IconButton(
                             icon: Icon(Ionicons.cart_outline),
-                            onPressed: () {
-                              print("cart pressed");
+                            onPressed: () async {
+                              try {
+                                final res = await addToCart(id, 1);
+                                if (!res) {
+                                  return;
+                                }
+
+                                final snackBar = SnackBar(
+                                  content: Text('Added to cart.'),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                                ref
+                                    .read(navigationNotifierProvider.notifier)
+                                    .updateNavigationIndex(2);
+                                Navigator.pop(context);
+                              } on Exception catch (ex) {}
                             }),
                       ),
                       SizedBox(width: 8),
                       Flexible(
                         child: PrimaryButton(
                           text: "Buy",
-                          onPressed: () {},
+                          onPressed: () {
+                            showModalBottomSheet<void>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Container(
+                                  height: 200,
+                                  color: Colors.amber,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        const Text('Modal BottomSheet'),
+                                        ElevatedButton(
+                                          child:
+                                              const Text('Close BottomSheet'),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
                       ),
                     ],

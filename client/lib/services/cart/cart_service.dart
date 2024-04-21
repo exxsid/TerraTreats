@@ -32,3 +32,26 @@ Future<bool> deleteCart(String cartId) async {
     throw Exception("Failed to delete cart.");
   }
 }
+
+Future<bool> addToCart(int productId, int userId) async {
+  final uri = Uri.parse("$baseUrl/cart");
+
+  final response = await http.post(
+    uri,
+    headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+          'user_id': userId,
+          'product_id': productId,
+        },
+      ),
+  );
+
+  if (response.statusCode == 201) {
+    return true;
+  } else {
+    throw Exception("Failed to add to cart");
+  }
+}
