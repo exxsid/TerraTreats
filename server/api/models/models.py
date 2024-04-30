@@ -114,7 +114,7 @@ class OrderItem(Base):
     order_item_id: Mapped[int] = mapped_column(
         primary_key=True, autoincrement=True)
     order_id: Mapped[int] = mapped_column(ForeignKey("orders.order_id"))
-    prodcut_id: Mapped[int] = mapped_column(ForeignKey("products.product_id"))
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.product_id"))
     quantity: Mapped[int] = mapped_column(Integer())
 
     def __repr__(self) -> str:

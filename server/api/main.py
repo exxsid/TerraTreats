@@ -5,8 +5,8 @@ from fastapi.encoders import jsonable_encoder
 import uuid
 
 from utils import authentication as auth
-from utils import home_util, cart_util
-from models.api_base_model import Login, Signup, AddToCart
+from utils import home_util, cart_util, order_util
+from models.api_base_model import Login, PlaceOrder, Signup, AddToCart
 
 app = FastAPI()
 
@@ -114,3 +114,13 @@ async def get_cart(user_id: int):
         return Response(status_code=400)
 
     return result
+
+
+@app.post("/order")
+async def add_order(place_order: PlaceOrder):
+    result = await order_util.post_order(place_order)
+
+    if result is False:
+        return Response(status_code=400)
+    
+    return Response(status_code=201)

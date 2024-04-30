@@ -22,3 +22,12 @@ class Signup(BaseModel):
 class AddToCart(BaseModel):
     user_id: int
     product_id: int
+
+
+class PlaceOrder(BaseModel):
+    user_id: int
+    order_status: str
+    shipping_fee: float
+    product_id: int
+    quantity: int
+    order_size: str
