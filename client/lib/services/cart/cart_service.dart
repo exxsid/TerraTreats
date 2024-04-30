@@ -39,14 +39,14 @@ Future<bool> addToCart(int productId, int userId) async {
   final response = await http.post(
     uri,
     headers: {
-        'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(
+      <String, dynamic>{
+        'user_id': userId,
+        'product_id': productId,
       },
-      body: jsonEncode(
-        <String, dynamic>{
-          'user_id': userId,
-          'product_id': productId,
-        },
-      ),
+    ),
   );
 
   if (response.statusCode == 201) {

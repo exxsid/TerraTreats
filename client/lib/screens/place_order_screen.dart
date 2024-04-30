@@ -1,8 +1,12 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:ionicons/ionicons.dart";
+import "package:terratreats/models/order_model.dart";
+import "package:terratreats/riverpod/navigation_notifier.dart";
 import "package:terratreats/riverpod/selected_product_notifier.dart";
+import "package:terratreats/services/order_service.dart";
 import "package:terratreats/utils/app_theme.dart";
+import "package:terratreats/utils/token_util.dart";
 import "package:terratreats/widgets/primary_button.dart";
 
 class PlaceOrder extends ConsumerStatefulWidget {
@@ -77,7 +81,52 @@ class _PlaceOrderState extends ConsumerState<PlaceOrder> {
                 ),
               ),
               PrimaryButton(
-                onPressed: () {},
+                onPressed: () async {
+                  try {
+                    print("RRRUUUUGGGIIII");
+                    await addToOrder(
+                      Order(
+                        userId: Token.getUserToken()!,
+                        orderStatus: OrderStatus.pending,
+                        shippingFee: 10,
+                        productId: 11,
+                        quantity:
+                            ref.watch(orderQuantityNotifierProvider).quantity,
+                        orderSize:
+                            ref.watch(selectedOrderSizeNotifierProvider).size,
+                      ),
+                    );
+                    final snackBar = SnackBar(
+                      content: Text('Ordered Successfully.'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } on Exception catch (e) {
+                    print(e);
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("Place Order"),
+                          content: SingleChildScrollView(
+                            child: ListBody(
+                              children: [
+                                Text("Order failed"),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              child: const Text("Okay"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
                 text: "Place Order",
               ),
             ],
