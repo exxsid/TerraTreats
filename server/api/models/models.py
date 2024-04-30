@@ -1,14 +1,23 @@
-from typing import List, Optional
+from typing import List, Optional, Literal
 from sqlalchemy import ForeignKey, String, Integer, Enum, Boolean, Float, DateTime, types, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
+import enum
 
 
 class Base(DeclarativeBase):
     pass
 
+class OrderStatus(enum.Enum):
+    PENDING = 'pending'
+    CONFIRMED = 'confirmed'
+    OUT_FOR_DELIVERY = 'out for delivery'
+    DELIVERED = 'delivered'
+    CANCELLED = 'cancelled'
+
+# OrderStatus = Literal['pending', 'confirmed', 'out for delivery', 'delivered', 'cancelled']
 
 class User(Base):
     __tablename__ = 'users'
@@ -92,7 +101,7 @@ class Order(Base):
 
     order_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    # TODO order status enum
+    order_status: Mapped[OrderStatus]
     shipping_fee: Mapped[float] = mapped_column(Float())
 
     def __repr__(self) -> str:
