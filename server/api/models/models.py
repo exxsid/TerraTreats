@@ -116,6 +116,7 @@ class OrderItem(Base):
     order_id: Mapped[int] = mapped_column(ForeignKey("orders.order_id"))
     product_id: Mapped[int] = mapped_column(ForeignKey("products.product_id"))
     quantity: Mapped[int] = mapped_column(Integer())
+    order_size: Mapped[str] = mapped_column(String(), nullable=True)
 
     def __repr__(self) -> str:
         return f"OrderItem(order_item_id={self.order_item_id}, order_id={self.order_id}, product_id={self.product_id}, quantity={self.quantity})"

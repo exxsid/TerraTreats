@@ -21,7 +21,7 @@ async def post_order(place_order: PlaceOrder):
 
             order_id = order.order_id
 
-            order_item = OrderItem(order_id=order_id, product_id=place_order.product_id, quantity=place_order.quantity)
+            order_item = OrderItem(order_id=order_id, product_id=place_order.product_id, quantity=place_order.quantity, order_size=place_order.order_size)
 
             session.add(order_item)
             session.commit()
