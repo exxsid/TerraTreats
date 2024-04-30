@@ -10,10 +10,10 @@ final selectedProductNotifierProvider =
 
 
 class SelectedOrderSizeNotifier extends ChangeNotifier {
-  int index = 0;
+  String size = "1";
 
-  void setSelectedOrderSize(int index) {
-    this.index = index;
+  void setSelectedOrderSize(String size) {
+    this.size = size;
     notifyListeners();
   }
 }
@@ -25,6 +25,16 @@ class OrderQuantityNotifier extends ChangeNotifier {
 
   void setOrderQuantity(int quantity) {
     this.quantity = quantity;
+    notifyListeners();
+  }
+
+  void addQuantity() {
+    ++quantity;
+    notifyListeners();
+  }
+
+  void subtractQuantity() {
+    --quantity;
     notifyListeners();
   }
 }
