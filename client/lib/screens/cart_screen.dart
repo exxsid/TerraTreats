@@ -5,7 +5,7 @@ import "package:shared_preferences/shared_preferences.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/services/cart/cart_service.dart";
 import "package:terratreats/widgets/cart_card.dart";
-import "package:terratreats/utils/token_util.dart";
+import "package:terratreats/utils/preferences.dart";
 
 class Cart extends StatefulWidget {
   const Cart({super.key});

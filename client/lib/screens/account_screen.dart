@@ -3,7 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
 
 import "package:terratreats/screens/login.dart";
-import "package:terratreats/utils/token_util.dart";
+import "package:terratreats/utils/preferences.dart";
 
 class Account extends ConsumerStatefulWidget {
   const Account({super.key});

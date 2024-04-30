@@ -5,12 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:terratreats/screens/bottom_navbar.dart';
 import 'package:terratreats/screens/login.dart';
-import "package:terratreats/utils/token_util.dart";
+import "package:terratreats/utils/preferences.dart";
 
 Future main() async {
   await dotenv.load(fileName: ".env");
 
   await Token.init();
+  await SearchHistory.init();
 
   runApp(const ProviderScope(child: MyApp()));
 }

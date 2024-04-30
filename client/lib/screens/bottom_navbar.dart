@@ -6,6 +6,7 @@ import "package:terratreats/screens/account_screen.dart";
 import "package:terratreats/screens/home_screen.dart";
 import "package:terratreats/screens/messages_screen.dart";
 import "package:terratreats/screens/cart_screen.dart";
+import "package:terratreats/screens/search_screen.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
 
@@ -47,6 +48,9 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
             ),
           ),
           backgroundColor: AppTheme.highlight,
+          actions: [
+            searchButton(context),
+          ],
         ),
         body: IndexedStack(
           index: ref.watch(navigationNotifierProvider).index,
@@ -93,6 +97,21 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
           }),
         ),
       ),
+    );
+  }
+
+  IconButton searchButton(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return Search();
+          }),
+        );
+      },
+      icon: Icon(Ionicons.search_outline),
+      color: AppTheme.primary,
     );
   }
 }

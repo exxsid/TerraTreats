@@ -6,7 +6,7 @@ import "package:terratreats/riverpod/navigation_notifier.dart";
 import "package:terratreats/riverpod/selected_product_notifier.dart";
 import "package:terratreats/services/order_service.dart";
 import "package:terratreats/utils/app_theme.dart";
-import "package:terratreats/utils/token_util.dart";
+import "package:terratreats/utils/preferences.dart";
 import "package:terratreats/widgets/primary_button.dart";
 
 class PlaceOrder extends ConsumerStatefulWidget {
