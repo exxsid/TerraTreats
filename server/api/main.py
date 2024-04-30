@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 import uuid
 
 from utils import authentication as auth
-from utils import home_util, cart_util, order_util
+from utils import home_util, cart_util, order_util, search_util
 from models.api_base_model import Login, PlaceOrder, Signup, AddToCart
 
 app = FastAPI()
@@ -124,3 +124,13 @@ async def add_order(place_order: PlaceOrder):
         return Response(status_code=400)
     
     return Response(status_code=201)
+
+
+@app.get("/search")
+async def search_product(search_str: str):
+    result = await search_util.search_product(search_str)
+
+    if result is None:
+        return Response(status_code=404)
+
+    return result
