@@ -1,8 +1,15 @@
+import "package:flutter/cupertino.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
+import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:ionicons/ionicons.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
 
 import "package:terratreats/screens/login.dart";
+import "package:terratreats/screens/my_parcel_screen.dart";
+import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/utils/preferences.dart";
 
 class Account extends ConsumerStatefulWidget {
@@ -17,50 +24,279 @@ class _AccountState extends ConsumerState<Account> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity,
+      color: AppTheme.highlight,
+      padding: EdgeInsets.all(8),
       child: SingleChildScrollView(
-        child: ElevatedButton(
-          child: Text("Logout"),
-          onPressed: () => showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Consumer(builder: (context, ref, child) {
-                  return AlertDialog(
-                    title: const Text("Logout"),
-                    content: const SingleChildScrollView(
-                      child: ListBody(
-                        children: [
-                          Text('This is a demo alert dialog.'),
-                          Text('Would you like to approve of this message?'),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        child: const Text("Yes"),
-                        onPressed: () {
-                          ref
-                              .read(navigationNotifierProvider.notifier)
-                              .updateNavigationIndex(0);
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return const Login();
-                            }),
-                            ModalRoute.withName("/"),
-                          );
-                        },
-                      ),
-                      TextButton(
-                        child: const Text("No"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  );
-                });
-              }),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            profileCard(),
+            const SizedBox(height: 16),
+            myParcelCard(),
+            const SizedBox(height: 16),
+            accountButton(
+                title: const Text("Account Information"), onTap: () {}),
+            const SizedBox(height: 8),
+            accountButton(title: const Text("Feedback"), onTap: () {}),
+            const SizedBox(height: 8),
+            accountButton(
+                title: const Text("Sell in TerraTreats"), onTap: () {}),
+            const SizedBox(height: 16),
+            logoutButton(context),
+          ],
         ),
+      ),
+    );
+  }
+
+  Container logoutButton(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: AppTheme.highlight,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 1,
+            spreadRadius: 1,
+          )
+        ],
+      ),
+      child: InkWell(
+        child: Center(
+          child: Text(
+            "Logout",
+            style: TextStyle(color: Colors.red[700]),
+          ),
+        ),
+        onTap: () => showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Consumer(builder: (context, ref, child) {
+                return AlertDialog(
+                  title: const Text("Logout"),
+                  content: const SingleChildScrollView(
+                    child: ListBody(
+                      children: [
+                        Text('This is a demo alert dialog.'),
+                        Text('Would you like to approve of this message?'),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      child: const Text("Yes"),
+                      onPressed: () {
+                        ref
+                            .read(navigationNotifierProvider.notifier)
+                            .updateNavigationIndex(0);
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return const Login();
+                          }),
+                          ModalRoute.withName("/"),
+                        );
+                      },
+                    ),
+                    TextButton(
+                      child: const Text("No"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                );
+              });
+            }),
+      ),
+    );
+  }
+
+  Container accountButton({required Text title, required VoidCallback onTap}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: AppTheme.highlight,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 1,
+            spreadRadius: 1,
+          )
+        ],
+      ),
+      child: InkWell(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: title,
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
+
+  Column myParcelCard() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          "My Parcels",
+          style: TextStyle(
+            color: AppTheme.primary,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            // To Pay
+            myParcelButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return MyParcel();
+                    },
+                  ),
+                );
+              },
+              title: "To Pay",
+              buttonIcon: Icon(
+                FeatherIcons.creditCard,
+                color: AppTheme.primary,
+              ),
+            ),
+            // To Ship
+            myParcelButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return MyParcel();
+                    },
+                  ),
+                );
+              },
+              title: "To Ship",
+              buttonIcon: Icon(
+                FeatherIcons.package,
+                color: AppTheme.primary,
+              ),
+            ),
+            // To Recieve
+            myParcelButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return MyParcel();
+                    },
+                  ),
+                );
+              },
+              title: "To Recieve",
+              buttonIcon: Icon(
+                FeatherIcons.truck,
+                color: AppTheme.primary,
+              ),
+            ),
+            // To Review
+            myParcelButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return MyParcel();
+                    },
+                  ),
+                );
+              },
+              title: "To Review",
+              buttonIcon: Icon(
+                FeatherIcons.messageSquare,
+                color: AppTheme.primary,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Column myParcelButton({
+    required VoidCallback onPressed,
+    required String title,
+    required Icon buttonIcon,
+  }) {
+    return Column(
+      children: <Widget>[
+        IconButton(
+          onPressed: onPressed,
+          icon: buttonIcon,
+        ),
+        Text(
+          title,
+          style: TextStyle(
+            color: AppTheme.primary,
+            fontWeight: FontWeight.bold,
+            fontSize: 10,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container profileCard() {
+    return Container(
+      width: double.infinity,
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: Colors.blueAccent,
+            ),
+            child: Icon(
+              Ionicons.person_outline,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            width: 12,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "Leo Cortez",
+                style: TextStyle(
+                  color: AppTheme.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              Text(
+                "Ubbog, Bacnotan, La Union",
+                style: TextStyle(
+                  color: AppTheme.primary,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
