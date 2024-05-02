@@ -40,10 +40,7 @@ class _SearchState extends ConsumerState<Search> {
         actions: [
           IconButton(
             onPressed: () async {
-              // TODO search functionality
               await SearchHistory.addSearchHistory(_searchController.text);
-              print("TTTTAAAAIIINNNGGGAAA");
-              print(SearchHistory.getSearchHistory());
               setState(() {
                 _isSearch = true;
               });

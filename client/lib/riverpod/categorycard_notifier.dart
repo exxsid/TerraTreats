@@ -19,3 +19,5 @@ class CategoryCardItem {
 
 final categoryCardItemProvider =
     StateProvider<List<CategoryCardItem>>((ref) => []);
+
+final categoryProductProvider = StateProvider<String>((ref) => "");
