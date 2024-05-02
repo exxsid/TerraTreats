@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 
 from models.models import User, Address
 from models.api_base_model import Login, Signup
@@ -17,10 +17,29 @@ def get_users():
 
 async def login_user(credentials: Login):
     with Session(engine) as session:
-        result = session.query(User).filter(
-            User.email == credentials.email, User.password == credentials.password).first()
+        query = select(User.id, User.email, User.password, User.first_name, User.last_name, User.phonenumber, User.is_seller, Address.street, Address.barangay, Address.city, Address.province, Address.postal_code).select_from(User).\
+            join(Address, User.id == Address.user_id).\
+            filter(User.email == credentials.email, User.password == credentials.password)
+        result = session.execute(query)
 
-    return result
+    res = {}
+    for col in result:
+        res = {
+            'id': col[0],
+            'email': col[1],
+            'password': col[2],
+            'first_name': col[3],
+            'last_name': col[4],
+            'phonenumber': col[5],
+            'is_seller': col[6],
+            'street': col[7],
+            'barangay': col[8],
+            'city': col[9],
+            'province': col[10],
+            'postal_code': col[11]
+        }
+
+    return res
 
 
 async def signup_user(credentials: Signup):

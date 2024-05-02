@@ -25,7 +25,7 @@ async def user_login(credentials: Login):
         return response
 
     response = JSONResponse(content=jsonable_encoder(result))
-    response.set_cookie(key="user_id", value=result.id, secure=True)
+    response.set_cookie(key="user_id", value=result['id'], secure=True)
     response.status_code = 201
     return response
 
