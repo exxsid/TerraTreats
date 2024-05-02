@@ -34,8 +34,20 @@ class AuthService {
           .trim()
           .split("=")[1]
           .trim();
-      print("tangina dadsf${userId}afadfadsf");
+      final content = jsonDecode(response.body);
       await Token.setUserToken(int.parse(userId!));
+      await Token.setEmailToken(content['email']);
+      await Token.setPasswordToken(content['password']);
+      await Token.setFirstNameToken(content['first_name']);
+      await Token.setLastNameToken(content['last_name']);
+      await Token.setPhonenumberToken(content['phonenumber']);
+      await Token.setIsSellerToken(content['is_seller']);
+      await Token.setStreetToken(content['street']);
+      await Token.setBarangayToken(content['barangay']);
+      await Token.setCityToken(content['city']);
+      await Token.setProvinceToken(content['province']);
+      await Token.setPostalCodeToken(content['postal_code']);
+
       return LoginModel.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
     } else {
