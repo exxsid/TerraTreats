@@ -24,8 +24,7 @@ async def user_login(credentials: Login):
         response.status_code = 404
         return response
 
-    content = {"email": result.email, "password": result.password}
-    response = JSONResponse(content=content)
+    response = JSONResponse(content=jsonable_encoder(result))
     response.set_cookie(key="user_id", value=result.id, secure=True)
     response.status_code = 201
     return response
