@@ -103,3 +103,32 @@ async def get_featured_product():
         }
 
     return res
+
+async def get_product_by_category(category: str):
+    with Session(engine) as session:
+        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name).\
+            select_from(Product).\
+            join(Category, Product.category_id == Category.category_id).\
+            join(Seller, Product.seller_id == Seller.id).\
+            join(User, Seller.user_id == User.id).\
+            filter(Category.category_name.ilike(category))
+
+        result = session.execute(query).fetchall()
+    res = []
+    for col in result:
+        temp = {
+            "productId": col[0],
+            "name": col[1],
+            "description": col[2],
+            "price": col[3],
+            "stock": col[4],
+            "unit": col[5],
+            "imgUrl": col[6],
+            "rating": col[7],
+            "category": col[8],
+            "seller": f"{col[9]} {col[10]}"
+        }
+
+        res.append(temp)
+
+    return res

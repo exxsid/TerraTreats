@@ -74,6 +74,14 @@ async def get_product_by_id(id: int):
 
     return result
 
+@app.get("/cat-product")
+async def get_product_by_category(category: str):
+    result = await home_util.get_product_by_category(category)
+
+    if result is None:
+        return Response(status_code=404)
+
+    return result
 
 @app.get("/featured-product")
 async def get_featured_product():
