@@ -21,6 +21,8 @@ class Account extends ConsumerStatefulWidget {
 
 // TODO: create a separate account screen for seller
 class _AccountState extends ConsumerState<Account> {
+  bool _isSeller = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,16 +39,38 @@ class _AccountState extends ConsumerState<Account> {
             const SizedBox(height: 16),
             accountButton(
                 title: const Text("Account Information"), onTap: () {}),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             accountButton(title: const Text("Feedback"), onTap: () {}),
-            const SizedBox(height: 8),
-            accountButton(
-                title: const Text("Sell in TerraTreats"), onTap: () {}),
+            (_isSeller ? sellerAccountButtons() : notSellerAccountButtons()),
             const SizedBox(height: 16),
             logoutButton(context),
           ],
         ),
       ),
+    );
+  }
+
+  Column sellerAccountButtons() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 4),
+        accountButton(title: const Text("My Products"), onTap: () {}),
+        const SizedBox(height: 4),
+        accountButton(title: const Text("My Orders"), onTap: () {}),
+        const SizedBox(height: 4),
+        accountButton(title: const Text("Delivery Schedule"), onTap: () {}),
+      ],
+    );
+  }
+
+  Column notSellerAccountButtons() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 4),
+        accountButton(title: const Text("Sell in TerraTreats"), onTap: () {}),
+      ],
     );
   }
 
@@ -279,7 +303,7 @@ class _AccountState extends ConsumerState<Account> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                "Leo Cortez",
+                "${Token.getFirstNameToken()} ${Token.getLastNameToken()}",
                 style: TextStyle(
                   color: AppTheme.primary,
                   fontWeight: FontWeight.bold,
@@ -287,7 +311,7 @@ class _AccountState extends ConsumerState<Account> {
                 ),
               ),
               Text(
-                "Ubbog, Bacnotan, La Union",
+                "${Token.getBarangayToken()}, ${Token.getCityToken()}, ${Token.getProvinceToken()}",
                 style: TextStyle(
                   color: AppTheme.primary,
                   fontWeight: FontWeight.w300,
