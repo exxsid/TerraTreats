@@ -3,6 +3,7 @@ import "package:flutter_dotenv/flutter_dotenv.dart";
 import "dart:convert";
 import "package:http/http.dart" as http;
 import "package:terratreats/models/order_model.dart";
+import "package:terratreats/models/parcel_model.dart";
 
 final baseUrl = dotenv.env["BASE_URL"];
 
@@ -30,5 +31,58 @@ Future<bool> addToOrder(Order order) async {
     return true;
   } else {
     throw Exception("Failed to add to cart");
+  }
+}
+
+
+Future<List<Parcel>> getToPayParcel(int userId) async{
+  final uri = Uri.parse('$baseUrl/to-pay?user_id=$userId');
+
+  final response = await http.get(uri);
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body) as List<dynamic>;
+    return data.map((item) => Parcel.fromJson(item)).toList();
+  } else {
+    throw Exception("Failed to get recommended products.");
+  }
+}
+
+Future<List<Parcel>> getToShipParcel(int userId) async{
+  final uri = Uri.parse('$baseUrl/to-ship?user_id=$userId');
+
+  final response = await http.get(uri);
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body) as List<dynamic>;
+    return data.map((item) => Parcel.fromJson(item)).toList();
+  } else {
+    throw Exception("Failed to get recommended products.");
+  }
+}
+
+Future<List<Parcel>> getToDeliverParcel(int userId) async{
+  final uri = Uri.parse('$baseUrl/to-deliver?user_id=$userId');
+
+  final response = await http.get(uri);
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body) as List<dynamic>;
+    return data.map((item) => Parcel.fromJson(item)).toList();
+  } else {
+    throw Exception("Failed to get recommended products.");
+  }
+}
+
+Future<List<Parcel>> getToReviewParcel(int userId) async{
+  final uri = Uri.parse('$baseUrl/to-review?user_id=$userId');
+
+  final response = await http.get(uri);
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body) as List<dynamic>;
+    return data.map((item) => Parcel.fromJson(item)).toList();
+  } else {
+    throw Exception("Failed to get recommended products.");
   }
 }

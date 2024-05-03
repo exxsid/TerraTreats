@@ -9,6 +9,7 @@ import "package:terratreats/riverpod/navigation_notifier.dart";
 
 import "package:terratreats/screens/login.dart";
 import "package:terratreats/screens/my_parcel_screen.dart";
+import "package:terratreats/services/order_service.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/utils/preferences.dart";
 
@@ -180,12 +181,16 @@ class _AccountState extends ConsumerState<Account> {
           children: <Widget>[
             // To Pay
             myParcelButton(
-              onPressed: () {
+              onPressed: () async {
+                final parcels = await getToPayParcel(Token.getUserToken()!);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return MyParcel();
+                      return MyParcel(
+                        parcels: parcels,
+                        title: "To Pay",
+                      );
                     },
                   ),
                 );
@@ -198,12 +203,16 @@ class _AccountState extends ConsumerState<Account> {
             ),
             // To Ship
             myParcelButton(
-              onPressed: () {
+              onPressed: () async {
+                final parcels = await getToShipParcel(Token.getUserToken()!);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return MyParcel();
+                      return MyParcel(
+                        parcels: parcels,
+                        title: "To Pay",
+                      );
                     },
                   ),
                 );
@@ -216,12 +225,16 @@ class _AccountState extends ConsumerState<Account> {
             ),
             // To Recieve
             myParcelButton(
-              onPressed: () {
+              onPressed: () async {
+                final parcels = await getToDeliverParcel(Token.getUserToken()!);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return MyParcel();
+                      return MyParcel(
+                        parcels: parcels,
+                        title: "To Pay",
+                      );
                     },
                   ),
                 );
@@ -234,12 +247,16 @@ class _AccountState extends ConsumerState<Account> {
             ),
             // To Review
             myParcelButton(
-              onPressed: () {
+              onPressed: () async {
+                final parcels = await getToReviewParcel(Token.getUserToken()!);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return MyParcel();
+                      return MyParcel(
+                        parcels: parcels,
+                        title: "To Pay",
+                      );
                     },
                   ),
                 );
