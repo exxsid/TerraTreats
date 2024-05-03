@@ -87,6 +87,7 @@ class Product(Base):
     unit: Mapped[str] = mapped_column(String())
     image_url: Mapped[str] = mapped_column(String())
     rating: Mapped[float] = mapped_column(Float(), default=0, nullable=True)
+    sold: Mapped[int] = mapped_column(Integer(), default=0, nullable=True)
     category_id: Mapped[int] = mapped_column(
         ForeignKey('categories.category_id'))
     seller_id: Mapped[int] = mapped_column(ForeignKey(
