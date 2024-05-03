@@ -18,7 +18,7 @@ async def get_category():
 
 async def get_recommended_products():
     with Session(engine) as session:
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name).\
+        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold).\
             select_from(Product).\
             join(Category, Product.category_id == Category.category_id).\
             join(Seller, Product.seller_id == Seller.id).\
@@ -37,7 +37,8 @@ async def get_recommended_products():
             "imgUrl": col[6],
             "rating": col[7],
             "category": col[8],
-            "seller": f"{col[9]} {col[10]}"
+            "seller": f"{col[9]} {col[10]}",
+            "sold": col[11]
         }
         res.append(temp)
 
@@ -46,7 +47,7 @@ async def get_recommended_products():
 
 async def get_product_by_id(id: int):
     with Session(engine) as session:
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name).\
+        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold).\
             select_from(Product).\
             join(Category, Product.category_id == Category.category_id).\
             join(Seller, Product.seller_id == Seller.id).\
@@ -66,7 +67,8 @@ async def get_product_by_id(id: int):
             "imgUrl": col[6],
             "rating": col[7],
             "category": col[8],
-            "seller": f"{col[9]} {col[10]}"
+            "seller": f"{col[9]} {col[10]}",
+            "sold": col[11]
         }
 
     return res
@@ -80,7 +82,7 @@ async def get_featured_product():
         # Generate a random offset within the row count
         random_offset = random.randrange(num_rows)
 
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name).\
+        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold).\
             select_from(Product).\
             join(Category, Product.category_id == Category.category_id).\
             join(Seller, Product.seller_id == Seller.id).\
@@ -99,14 +101,15 @@ async def get_featured_product():
             "imgUrl": col[6],
             "rating": col[7],
             "category": col[8],
-            "seller": f"{col[9]} {col[10]}"
+            "seller": f"{col[9]} {col[10]}",
+            "sold": col[11]
         }
 
     return res
 
 async def get_product_by_category(category: str):
     with Session(engine) as session:
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name).\
+        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold).\
             select_from(Product).\
             join(Category, Product.category_id == Category.category_id).\
             join(Seller, Product.seller_id == Seller.id).\
@@ -126,7 +129,8 @@ async def get_product_by_category(category: str):
             "imgUrl": col[6],
             "rating": col[7],
             "category": col[8],
-            "seller": f"{col[9]} {col[10]}"
+            "seller": f"{col[9]} {col[10]}",
+            "sold": col[11]
         }
 
         res.append(temp)
