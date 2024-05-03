@@ -132,6 +132,14 @@ async def add_order(place_order: PlaceOrder):
     
     return Response(status_code=201)
 
+@app.get("/to-pay")
+async def get_to_pay_price(user_id: int):
+    result = await order_util.get_to_pay_parcel(user_id)
+    
+    if result is False:
+        return Response(status_code=400)
+
+    return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
 @app.get("/search")
 async def search_product(search_str: str):

@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 import uuid
 
-from models.models import Order, OrderItem
+from models.models import Category, Order, OrderItem, Product, Seller, User
 from models.api_base_model import PlaceOrder
 
 engine = engine = create_engine('postgresql+psycopg://leo:1234@127.0.0.1:5432/terratreats',
@@ -30,4 +30,56 @@ async def post_order(place_order: PlaceOrder):
         print(e)
         session.rollback()
         return False
-    
+
+
+async def get_to_pay_parcel(user_id: int):
+    with Session(engine) as session:        
+        query = select (Product.product_id, Product.product_name, 
+                        Product.image_url, Product.price, Product.unit, 
+                        Product.rating, User.first_name, User.last_name, 
+                        Order.shipping_fee, OrderItem.quantity, 
+                        OrderItem.order_size).\
+                        select_from(Order).\
+                        join(OrderItem, Order.order_id == OrderItem.order_id).\
+                        join(Product, 
+                             OrderItem.product_id == Product.product_id).\
+                        join(Seller, Product.seller_id == Seller.id).\
+                        join(User, Seller.user_id == User.id).\
+                        filter(Order.order_status == 'pending',
+                               Order.user_id == user_id)
+
+        result = session.execute(query)
+    res = []
+    for col in result:
+        temp = {
+            'product_id': col[0],
+            'product_name': col[1],
+            'img_url': col[2],
+            'price': col[3],
+            'unit': col[4],
+            'rating': col[5],
+            'seller': f"{col[6]} {col[7]}",
+            'order_size': col[10],
+            'total_price': calculate_total_price(
+                col[3], col[9], col[8], col[10]
+            )
+        }
+
+        res.append(temp)
+
+
+    return res
+
+def calculate_total_price(price, quantity, shipping, size):
+    match (size):
+        case "1":
+            return price * quantity + shipping
+        
+        case "3/4":
+            return (price * (3/4)) * quantity + shipping
+        
+        case "1/2":
+            return (price * (1/2)) * quantity + shipping
+        
+        case "1/4":
+            return (price * (1/4)) * quantity + shipping
