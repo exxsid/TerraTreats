@@ -10,6 +10,7 @@ class Product {
   final String category;
   final String seller;
   final int sold;
+  final double shippingFee;
 
   Product({
     required this.productId,
@@ -23,6 +24,7 @@ class Product {
     required this.category,
     required this.seller,
     required this.sold,
+    required this.shippingFee,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class Product {
       category: json['category'] as String,
       seller: json['seller'] as String,
       sold: json['sold'] as int,
+      shippingFee: json['shipping_fee'] as double,
     );
   }
 }

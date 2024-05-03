@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:ionicons/ionicons.dart";
 import "package:terratreats/models/order_model.dart";
+import "package:terratreats/models/product_model.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
 import "package:terratreats/riverpod/selected_product_notifier.dart";
 import "package:terratreats/services/order_service.dart";
@@ -10,7 +11,10 @@ import "package:terratreats/utils/preferences.dart";
 import "package:terratreats/widgets/primary_button.dart";
 
 class PlaceOrder extends ConsumerStatefulWidget {
-  const PlaceOrder({super.key});
+  final Product product;
+
+
+  const PlaceOrder({super.key, required this.product});
 
   @override
   ConsumerState<PlaceOrder> createState() => _PlaceOrderState();
@@ -83,13 +87,12 @@ class _PlaceOrderState extends ConsumerState<PlaceOrder> {
               PrimaryButton(
                 onPressed: () async {
                   try {
-                    print("RRRUUUUGGGIIII");
                     await addToOrder(
                       Order(
                         userId: Token.getUserToken()!,
                         orderStatus: OrderStatus.pending,
-                        shippingFee: 10,
-                        productId: 11,
+                        shippingFee: widget.product.shippingFee,
+                        productId: widget.product.productId,
                         quantity:
                             ref.watch(orderQuantityNotifierProvider).quantity,
                         orderSize:
@@ -137,6 +140,19 @@ class _PlaceOrderState extends ConsumerState<PlaceOrder> {
   }
 
   Container totalAmountDetail() {
+    late double totalAmount;
+
+    switch(ref.watch(selectedOrderSizeNotifierProvider).size) {
+      case "1":
+        totalAmount = ref.watch(orderQuantityNotifierProvider).quantity * widget.product.price;
+      case "3/4":
+        totalAmount = ref.watch(orderQuantityNotifierProvider).quantity * (0.75 * widget.product.price);
+      case '1/2':
+        totalAmount = ref.watch(orderQuantityNotifierProvider).quantity * (0.5 * widget.product.price);
+      case "1/4":
+        totalAmount = ref.watch(orderQuantityNotifierProvider).quantity * (0.25 * widget.product.price);
+    }
+
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,7 +166,7 @@ class _PlaceOrderState extends ConsumerState<PlaceOrder> {
             ),
           ),
           Text(
-            "PHP 60",
+            "PHP $totalAmount",
             style: TextStyle(
               color: AppTheme.primary,
               fontSize: 22,
@@ -187,7 +203,7 @@ class _PlaceOrderState extends ConsumerState<PlaceOrder> {
                 ),
               ),
               Text(
-                "PHP 10.00",
+                "PHP ${widget.product.shippingFee}",
                 style: TextStyle(
                   color: AppTheme.secondary,
                   fontSize: 16,
@@ -274,7 +290,7 @@ class _PlaceOrderState extends ConsumerState<PlaceOrder> {
           child: FadeInImage(
             placeholder: AssetImage('assets/images/placeholder.jpg'),
             image: NetworkImage(
-                'https://res.cloudinary.com/db2ixxygt/image/upload/v1714314613/1/rod0e5uksdliodufyg1b.jpg'),
+                widget.product.imgUrl),
           ),
         ),
         SizedBox(
@@ -284,7 +300,7 @@ class _PlaceOrderState extends ConsumerState<PlaceOrder> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              "Product Name",
+              widget.product.name,
               style: TextStyle(
                 color: AppTheme.primary,
                 fontSize: 30,
@@ -292,7 +308,7 @@ class _PlaceOrderState extends ConsumerState<PlaceOrder> {
               ),
             ),
             Text(
-              "PHP 100.00 / Kilo",
+              "PHP ${widget.product.price} / ${widget.product.unit}",
               style: TextStyle(
                 color: AppTheme.secondary,
                 fontSize: 15,

@@ -204,7 +204,7 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (builder) {
-                                return PlaceOrder();
+                                return PlaceOrder(product: data);
                               })
                             );
                           },
