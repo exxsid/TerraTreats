@@ -146,6 +146,44 @@ async def get_to_deliver_parcel(user_id: int):
 
     return res
 
+async def get_to_review_parcel(user_id: int):
+    with Session(engine) as session:        
+        query = select (Product.product_id, Product.product_name, 
+                        Product.image_url, Product.price, Product.unit, 
+                        Product.rating, User.first_name, User.last_name, 
+                        Order.shipping_fee, OrderItem.quantity, 
+                        OrderItem.order_size).\
+                        select_from(Order).\
+                        join(OrderItem, Order.order_id == OrderItem.order_id).\
+                        join(Product, 
+                             OrderItem.product_id == Product.product_id).\
+                        join(Seller, Product.seller_id == Seller.id).\
+                        join(User, Seller.user_id == User.id).\
+                        filter(Order.order_status == 'delivered',
+                               Order.user_id == user_id)
+
+        result = session.execute(query)
+    res = []
+    for col in result:
+        temp = {
+            'product_id': col[0],
+            'product_name': col[1],
+            'img_url': col[2],
+            'price': col[3],
+            'unit': col[4],
+            'rating': col[5],
+            'seller': f"{col[6]} {col[7]}",
+            'order_size': col[10],
+            'total_price': calculate_total_price(
+                col[3], col[9], col[8], col[10]
+            )
+        }
+
+        res.append(temp)
+
+
+    return res
+
 def calculate_total_price(price, quantity, shipping, size):
     match (size):
         case "1":
