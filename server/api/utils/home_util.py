@@ -18,7 +18,7 @@ async def get_category():
 
 async def get_recommended_products():
     with Session(engine) as session:
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold).\
+        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold, Product.shipping_fee).\
             select_from(Product).\
             join(Category, Product.category_id == Category.category_id).\
             join(Seller, Product.seller_id == Seller.id).\
@@ -38,7 +38,8 @@ async def get_recommended_products():
             "rating": col[7],
             "category": col[8],
             "seller": f"{col[9]} {col[10]}",
-            "sold": col[11]
+            "sold": col[11],
+            "shipping_fee": col[12]
         }
         res.append(temp)
 
@@ -47,7 +48,7 @@ async def get_recommended_products():
 
 async def get_product_by_id(id: int):
     with Session(engine) as session:
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold).\
+        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold, Product.shipping_fee).\
             select_from(Product).\
             join(Category, Product.category_id == Category.category_id).\
             join(Seller, Product.seller_id == Seller.id).\
@@ -68,7 +69,8 @@ async def get_product_by_id(id: int):
             "rating": col[7],
             "category": col[8],
             "seller": f"{col[9]} {col[10]}",
-            "sold": col[11]
+            "sold": col[11],
+            "shipping_fee": col[12]
         }
 
     return res
@@ -109,7 +111,7 @@ async def get_featured_product():
 
 async def get_product_by_category(category: str):
     with Session(engine) as session:
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold).\
+        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold, Product.shipping_fee).\
             select_from(Product).\
             join(Category, Product.category_id == Category.category_id).\
             join(Seller, Product.seller_id == Seller.id).\
@@ -130,7 +132,8 @@ async def get_product_by_category(category: str):
             "rating": col[7],
             "category": col[8],
             "seller": f"{col[9]} {col[10]}",
-            "sold": col[11]
+            "sold": col[11],
+            "shipping_fee": col[12]
         }
 
         res.append(temp)
