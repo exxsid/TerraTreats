@@ -9,18 +9,21 @@ class Product {
   final double rating;
   final String category;
   final String seller;
+  final int sold;
 
-  Product(
-      {required this.productId,
-      required this.name,
-      required this.description,
-      required this.price,
-      required this.stock,
-      required this.unit,
-      required this.imgUrl,
-      required this.rating,
-      required this.category,
-      required this.seller});
+  Product({
+    required this.productId,
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.stock,
+    required this.unit,
+    required this.imgUrl,
+    required this.rating,
+    required this.category,
+    required this.seller,
+    required this.sold,
+  });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
@@ -34,6 +37,7 @@ class Product {
       rating: json['rating'] as double,
       category: json['category'] as String,
       seller: json['seller'] as String,
+      sold: json['sold'] as int,
     );
   }
 }

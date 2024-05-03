@@ -98,7 +98,7 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                             ),
                           ),
                           Text(
-                            "0 sold",
+                            "${data.sold} sold",
                             style: TextStyle(
                               color: AppTheme.secondary,
                               fontSize: 15,

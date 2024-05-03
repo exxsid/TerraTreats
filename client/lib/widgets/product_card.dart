@@ -23,7 +23,7 @@ class ProductCard extends ConsumerWidget {
     required this.rating,
     required this.seller,
     required this.imgUrl,
-    this.sold = 0,
+    required this.sold,
   });
 
   @override

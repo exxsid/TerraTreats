@@ -100,6 +100,7 @@ class _SearchState extends ConsumerState<Search> {
                   rating: prod.rating,
                   seller: prod.seller,
                   imgUrl: prod.imgUrl,
+                  sold: prod.sold,
                 ),
               );
             }),

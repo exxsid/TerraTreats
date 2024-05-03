@@ -106,6 +106,7 @@ class _HomeState extends ConsumerState<Home> {
                   rating: prod.rating,
                   seller: prod.seller,
                   imgUrl: prod.imgUrl,
+                  sold: prod.sold,
                 ),
               );
             }),

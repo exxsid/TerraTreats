@@ -47,6 +47,7 @@ class _ProductsCategoryState extends ConsumerState<ProductsCategory> {
                     rating: prod.rating,
                     seller: prod.seller,
                     imgUrl: prod.imgUrl,
+                    sold: prod.sold,
                   ),
                 );
               }),
