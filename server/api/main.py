@@ -150,6 +150,15 @@ async def get_to_ship_parcel(user_id: int):
 
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
+@app.get("/to-deliver")
+async def get_to_deliver_parcel(user_id: int):
+    result = await order_util.get_to_deliver_parcel(user_id)
+    
+    if result is False:
+        return Response(status_code=400)
+
+    return JSONResponse(content=jsonable_encoder(result), status_code=200)
+
 @app.get("/search")
 async def search_product(search_str: str):
     result = await search_util.search_product(search_str)
