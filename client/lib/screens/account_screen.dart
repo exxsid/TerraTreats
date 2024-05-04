@@ -7,6 +7,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:ionicons/ionicons.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
 import "package:terratreats/screens/account_information_screen.dart";
+import "package:terratreats/screens/feedback_screen.dart";
 
 import "package:terratreats/screens/login.dart";
 import "package:terratreats/screens/my_parcel_screen.dart";
@@ -42,11 +43,24 @@ class _AccountState extends ConsumerState<Account> {
             accountButton(
               title: const Text("Account Information"),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountInformation()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AccountInformation()));
               },
             ),
             const SizedBox(height: 4),
-            accountButton(title: const Text("Feedback"), onTap: () {}),
+            accountButton(
+              title: const Text("Feedback"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return UserFeedback();
+                  }),
+                );
+              },
+            ),
             (_isSeller ? sellerAccountButtons() : notSellerAccountButtons()),
             const SizedBox(height: 16),
             logoutButton(context),
