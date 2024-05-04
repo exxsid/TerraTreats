@@ -47,7 +47,7 @@ class AuthService {
       await Token.setCityToken(content['city']);
       await Token.setProvinceToken(content['province']);
       await Token.setPostalCodeToken(content['postal_code']);
-      await Token.setIsVerifiedToken(content['isVerified']);
+      await Token.setIsVerifiedToken(content['is_verified']);
 
       return LoginModel.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
