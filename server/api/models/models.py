@@ -29,6 +29,7 @@ class User(Base):
     last_name: Mapped[str] = mapped_column(String(50), nullable=False)
     phonenumber: Mapped[str] = mapped_column(String(50), nullable=False)
     is_seller: Mapped[bool] = mapped_column(Boolean(), default=False)
+    is_verified: Mapped[bool] = mapped_column(Boolean(), default=False, nullable=True)
 
     def __repr__(self) -> str:
         return f"User(id={self.id}, email={self.email}, password={self.password}, first_name={self.first_name}, last_name={self.last_name}, phonenumber={self.phonenumber}, is_seller={self.is_seller})"

@@ -17,7 +17,7 @@ def get_users():
 
 async def login_user(credentials: Login):
     with Session(engine) as session:
-        query = select(User.id, User.email, User.password, User.first_name, User.last_name, User.phonenumber, User.is_seller, Address.street, Address.barangay, Address.city, Address.province, Address.postal_code).select_from(User).\
+        query = select(User.id, User.email, User.password, User.first_name, User.last_name, User.phonenumber, User.is_seller, Address.street, Address.barangay, Address.city, Address.province, Address.postal_code, User.is_verified).select_from(User).\
             join(Address, User.id == Address.user_id).\
             filter(User.email == credentials.email, User.password == credentials.password)
         result = session.execute(query)
@@ -36,7 +36,8 @@ async def login_user(credentials: Login):
             'barangay': col[8],
             'city': col[9],
             'province': col[10],
-            'postal_code': col[11]
+            'postal_code': col[11],
+            'is_verified': col[12],
         }
 
     return res
