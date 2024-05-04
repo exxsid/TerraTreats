@@ -65,6 +65,10 @@ class Token {
 
   static String? getPostalCodeToken() => _prefs.getString('postalCode');
 
+  static Future setIsVerifiedToken(bool v) async => await _prefs.setBool("isVerified", v);
+
+  static bool? getIsVerifiedToken() => _prefs.getBool("isVerified");
+
   static Future removeToken() async => await _prefs.remove('user_id');
 }
 
