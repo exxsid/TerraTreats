@@ -6,6 +6,7 @@ import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:ionicons/ionicons.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
+import "package:terratreats/screens/account_information_screen.dart";
 
 import "package:terratreats/screens/login.dart";
 import "package:terratreats/screens/my_parcel_screen.dart";
@@ -39,7 +40,11 @@ class _AccountState extends ConsumerState<Account> {
             myParcelCard(),
             const SizedBox(height: 16),
             accountButton(
-                title: const Text("Account Information"), onTap: () {}),
+              title: const Text("Account Information"),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountInformation()));
+              },
+            ),
             const SizedBox(height: 4),
             accountButton(title: const Text("Feedback"), onTap: () {}),
             (_isSeller ? sellerAccountButtons() : notSellerAccountButtons()),
