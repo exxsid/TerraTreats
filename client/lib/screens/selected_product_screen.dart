@@ -1,16 +1,18 @@
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
+import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:terratreats/models/product_model.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
 import "package:terratreats/riverpod/selected_product_notifier.dart";
 import "package:terratreats/screens/place_order_screen.dart";
+import "package:terratreats/screens/reviews_screen.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/services/selected_product_service.dart";
 import "package:ionicons/ionicons.dart";
 import "package:terratreats/widgets/primary_button.dart";
 import "package:terratreats/services/cart/cart_service.dart";
 import "package:terratreats/utils/preferences.dart";
-import "package:shared_preferences/shared_preferences.dart";
+import "package:terratreats/widgets/review_card.dart";
 
 class SelectedProduct extends ConsumerStatefulWidget {
   const SelectedProduct({super.key});
@@ -114,7 +116,7 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                           ),
                           SizedBox(height: 16),
                           reviewBlock(),
-                          SizedBox(height: 50),
+                          SizedBox(height: 100),
                         ],
                       ),
                     )
@@ -201,12 +203,10 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                         child: PrimaryButton(
                           text: "Buy",
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (builder) {
-                                return PlaceOrder(product: data);
-                              })
-                            );
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (builder) {
+                              return PlaceOrder(product: data);
+                            }));
                           },
                         ),
                       ),
@@ -280,27 +280,39 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
   }
 
   Container reviewBlock() {
+    String test =
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel  hendrerit tellus. Curabitur id enim mattis, facilisis ipsum in,  consequat nisl. Aliquam pharetra dui vitae venenatis elementum. Sed  eleifend non est a placerat.";
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(
-              "Reviews",
-              style: TextStyle(
-                color: AppTheme.primary,
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Reviews",
+                style: TextStyle(
+                  color: AppTheme.primary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            TextButton(
-              child: Text("View all"),
-              onPressed: () {},
-            )
-          ])
+              TextButton(
+                child: Text("View all"),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return Reviews();
+                  }));
+                },
+              )
+            ],
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          ReviewCard(content: "ang baho", reviewer: "wala kang pake", rating: 1)
         ],
       ),
     );
   }
-
 }
