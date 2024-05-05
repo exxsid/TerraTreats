@@ -22,7 +22,6 @@ class Account extends ConsumerStatefulWidget {
   ConsumerState<Account> createState() => _AccountState();
 }
 
-// TODO: create a separate account screen for seller
 class _AccountState extends ConsumerState<Account> {
   bool _isSeller = false;
 
