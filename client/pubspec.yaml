@@ -44,6 +44,7 @@ dependencies:
   shared_preferences: ^2.2.3
   flutter_feather_icons: ^2.0.0+1
   flutter_rating_bar: ^4.0.1
+  syncfusion_flutter_datepicker: ^25.1.42
 
 dev_dependencies:
   flutter_test:

@@ -6,6 +6,7 @@ import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:ionicons/ionicons.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
+import "package:terratreats/screens/account/delivery_schedule.dart";
 import "package:terratreats/screens/account_information_screen.dart";
 import "package:terratreats/screens/feedback_screen.dart";
 
@@ -23,7 +24,13 @@ class Account extends ConsumerStatefulWidget {
 }
 
 class _AccountState extends ConsumerState<Account> {
-  bool _isSeller = false;
+  late bool _isSeller;
+
+  @override
+  void initState() {
+    super.initState();
+    _isSeller = Token.getIsSellerToken()!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +85,17 @@ class _AccountState extends ConsumerState<Account> {
         const SizedBox(height: 4),
         accountButton(title: const Text("My Orders"), onTap: () {}),
         const SizedBox(height: 4),
-        accountButton(title: const Text("Delivery Schedule"), onTap: () {}),
+        accountButton(
+          title: const Text("Delivery Schedule"),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DeliverySchedule(),
+              ),
+            );
+          },
+        ),
       ],
     );
   }
