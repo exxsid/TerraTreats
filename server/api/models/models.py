@@ -159,3 +159,14 @@ class Cart(Base):
 
     def __repr__(self) -> str:
         return f"Cart(card_id={self.cart_id}, user_id={self.user_id}, product_id={self.product_id})"
+
+
+class DeliverySchedule(Base):
+    __tablename__ = 'delivery_schedules'
+
+    deliver_id: Mapped[int] = mapped_column(Integer(), primary_key=True, autoincrement=True)
+    seller_id: Mapped[int] = mapped_column(ForeignKey('sellers.id', ondelete="CASCADE", onupdate="CASCADE"))
+    schedule: Mapped[str] = mapped_column(String(), nullable=True)
+
+    def __repr__(self) -> str:
+        return f"DeliverySchedule(delivery_id={self.deliver_id}, seller_id={self.seller_id}, schedule={self.schedule})"

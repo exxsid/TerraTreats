@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, select
 
-from models.models import User, Address
+from models.models import User, Address, Seller
 from models.api_base_model import Login, Signup
 
 engine = engine = create_engine('postgresql+psycopg://leo:1234@127.0.0.1:5432/terratreats',

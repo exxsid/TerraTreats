@@ -31,3 +31,7 @@ class PlaceOrder(BaseModel):
     product_id: int
     quantity: int
     order_size: str
+
+class Schedule(BaseModel):
+    seller_id: int
+    schedule: str

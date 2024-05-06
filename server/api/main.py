@@ -7,6 +7,7 @@ import uuid
 from utils import authentication as auth
 from utils import home_util, cart_util, order_util, search_util
 from models.api_base_model import Login, PlaceOrder, Signup, AddToCart
+from router import deliver_schedule
 
 app = FastAPI()
 
@@ -176,3 +177,5 @@ async def search_product(search_str: str):
         return Response(status_code=404)
 
     return result
+
+app.include_router(deliver_schedule.router)
