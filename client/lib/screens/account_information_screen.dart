@@ -27,22 +27,32 @@ class _AccountInformationState extends ConsumerState<AccountInformation> {
         child: Column(
           children: [
             accountInfoButton(
-                title: "Name",
-                value:
-                    "${Token.getFirstNameToken()} ${Token.getFirstNameToken()}"),
+              title: "Name",
+              value:
+                  "${Token.getFirstNameToken()} ${Token.getFirstNameToken()}",
+            ),
             accountInfoButton(
-                title: "Password",
-                value:
-                    ""),
+              title: "Password",
+              value: "",
+            ),
             accountInfoButton(
-                title: "Phonenumber",
-                value:
-                    "${Token.getPhonenumberToken()}"),
+              title: "Phonenumber",
+              value: "${Token.getPhonenumberToken()}",
+            ),
             accountInfoButton(
-                title: "Email",
-                value:
-                    "${Token.getEmailToken()}"),
-            accountInfoButton(title: "Virified", value: (Token.getIsVerifiedToken()! ? "Verified": "Not Verified")),
+              title: "Email",
+              value: "${Token.getEmailToken()}",
+            ),
+            accountInfoButton(
+              title: "Address",
+              value:
+                  "${Token.getBarangayToken()}, ${Token.getCityToken()}, ${Token.getProvinceToken()}",
+            ),
+            accountInfoButton(
+              title: "Virified",
+              value:
+                  (Token.getIsVerifiedToken()! ? "Verified" : "Not Verified"),
+            ),
           ],
         ),
       ),
