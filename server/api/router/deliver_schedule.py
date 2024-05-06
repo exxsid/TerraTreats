@@ -24,3 +24,12 @@ async def get_delivery_schedules(seller_id: int):
         return Response(status_code=404)
     
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
+
+@router.delete("/delivery-schedule")
+async def delete_delivery_schedule(delivery_id: int):
+    result = await dsu.delete_delivery_schedule(delivery_id)
+
+    if result is False:
+        return Response(status_code=400)
+    
+    return Response(status_code=204)

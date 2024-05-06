@@ -1,6 +1,6 @@
 import random
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, delete, select
 from sqlalchemy import func
 
 from models.models import DeliverySchedule, Seller, User
@@ -27,7 +27,7 @@ async def get_delivery_schedules(seller_id: int):
             id = session.execute(
                 session.query(Seller.id).select_from(Seller).filter(Seller.user_id == seller_id)
             ).first()
-            query = session.query(DeliverySchedule.schedule).\
+            query = session.query(DeliverySchedule.deliver_id, DeliverySchedule.schedule).\
                         select_from(DeliverySchedule).\
                         filter(DeliverySchedule.seller_id == id[0])
             result = session.execute(query).all()
@@ -35,10 +35,27 @@ async def get_delivery_schedules(seller_id: int):
             res = []
             for col in result:
                 temp = {
-                    "schedule": col[0]
+                    "deliver_id": col[0],
+                    "schedule": col[1]
                 }
                 res.append(temp)
 
             return res
     except TypeError as e:
         return []
+    
+
+async def delete_delivery_schedule(deliver_id: int):
+    try:
+
+        with Session(engine) as session:
+            delete_statement = delete(DeliverySchedule).where(DeliverySchedule.deliver_id == deliver_id)
+
+            session.execute(delete_statement)
+
+            session.commit()
+
+        return True
+    except Exception as e:
+        session.rollback()
+        return False
