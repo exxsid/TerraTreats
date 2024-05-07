@@ -7,6 +7,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:ionicons/ionicons.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
 import "package:terratreats/screens/account/delivery_schedule.dart";
+import "package:terratreats/screens/account/my_orders_screen.dart";
 import "package:terratreats/screens/account_information_screen.dart";
 import "package:terratreats/screens/feedback_screen.dart";
 
@@ -83,7 +84,17 @@ class _AccountState extends ConsumerState<Account> {
         const SizedBox(height: 4),
         accountButton(title: const Text("My Products"), onTap: () {}),
         const SizedBox(height: 4),
-        accountButton(title: const Text("My Orders"), onTap: () {}),
+        accountButton(
+          title: const Text("My Orders"),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyOrders(),
+              ),
+            );
+          },
+        ),
         const SizedBox(height: 4),
         accountButton(
           title: const Text("Delivery Schedule"),
