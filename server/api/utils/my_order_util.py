@@ -22,7 +22,9 @@ async def get_my_orders(seller_id: int):
                        join(User, Order.user_id == User.id).\
                        join(Product, OrderItem.product_id == Product.product_id).\
                        join(Address, User.id == Address.user_id).\
-                       filter(Product.seller_id == id[0])
+                       filter(Product.seller_id == id[0]).\
+                        order_by(Order.order_status)
+                        
         result = session.execute(query).fetchall()
 
         res = []
