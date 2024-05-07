@@ -15,7 +15,7 @@ async def get_my_orders(seller_id: int):
 
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
-@router.post("/my-orders")
+@router.put("/my-orders")
 async def update_order_status(order_id: int, new_status: str):
     result = await mou.update_order_status(order_id, new_status)
     
