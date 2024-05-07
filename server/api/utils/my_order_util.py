@@ -48,9 +48,12 @@ async def update_order_status(order_id: int, status: str):
         with Session(engine) as session:
             query = update(Order).where(Order.order_id == order_id).values(order_status=status)
             
-            session.execute(query)
+            result = session.execute(query)
+            count = result.rowcount
+            if count <= 0:
+                return False
             session.commit()
-            return 
+            return True
     except Exception as e:
         session.rollback()
         return False
