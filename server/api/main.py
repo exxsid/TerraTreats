@@ -4,10 +4,11 @@ import json
 from fastapi.encoders import jsonable_encoder
 import uuid
 
+from utils import parcel_util
 from utils import authentication as auth
-from utils import home_util, cart_util, order_util, search_util
+from utils import home_util, cart_util, search_util
 from models.api_base_model import Login, PlaceOrder, Signup, AddToCart
-from router import deliver_schedule
+from router import deliver_schedule, my_orders
 
 app = FastAPI()
 
@@ -126,7 +127,7 @@ async def get_cart(user_id: int):
 
 @app.post("/order")
 async def add_order(place_order: PlaceOrder):
-    result = await order_util.post_order(place_order)
+    result = await parcel_util.post_order(place_order)
 
     if result is False:
         return Response(status_code=400)
@@ -135,7 +136,7 @@ async def add_order(place_order: PlaceOrder):
 
 @app.get("/to-pay")
 async def get_to_pay_price(user_id: int):
-    result = await order_util.get_to_pay_parcel(user_id)
+    result = await parcel_util.get_to_pay_parcel(user_id)
     
     if result is False:
         return Response(status_code=400)
@@ -144,7 +145,7 @@ async def get_to_pay_price(user_id: int):
 
 @app.get("/to-ship")
 async def get_to_ship_parcel(user_id: int):
-    result = await order_util.get_to_ship_parcel(user_id)
+    result = await parcel_util.get_to_ship_parcel(user_id)
     
     if result is False:
         return Response(status_code=400)
@@ -153,7 +154,7 @@ async def get_to_ship_parcel(user_id: int):
 
 @app.get("/to-deliver")
 async def get_to_deliver_parcel(user_id: int):
-    result = await order_util.get_to_deliver_parcel(user_id)
+    result = await parcel_util.get_to_deliver_parcel(user_id)
     
     if result is False:
         return Response(status_code=400)
@@ -162,7 +163,7 @@ async def get_to_deliver_parcel(user_id: int):
 
 @app.get("/to-review")
 async def get_to_review_parcel(user_id: int):
-    result = await order_util.get_to_deliver_parcel(user_id)
+    result = await parcel_util.get_to_deliver_parcel(user_id)
     
     if result is False:
         return Response(status_code=400)
@@ -179,3 +180,4 @@ async def search_product(search_str: str):
     return result
 
 app.include_router(deliver_schedule.router)
+app.include_router(my_orders.router)

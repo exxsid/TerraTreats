@@ -11,11 +11,11 @@ class Base(DeclarativeBase):
     pass
 
 class OrderStatus(enum.Enum):
-    PENDING = 'pending'
-    CONFIRMED = 'confirmed'
-    OUT_FOR_DELIVERY = 'out for delivery'
-    DELIVERED = 'delivered'
-    CANCELLED = 'cancelled'
+    pending = 'pending'
+    confirmed = 'confirmed'
+    out_for_delivery = 'out for delivery'
+    delivered = 'delivered'
+    cancelled = 'cancelled'
 
 # OrderStatus = Literal['pending', 'confirmed', 'out for delivery', 'delivered', 'cancelled']
 
