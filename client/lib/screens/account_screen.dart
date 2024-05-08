@@ -257,7 +257,7 @@ class _AccountState extends ConsumerState<Account> {
                     builder: (context) {
                       return MyParcel(
                         parcels: parcels,
-                        title: "To Pay",
+                        title: "To Ship",
                       );
                     },
                   ),
@@ -279,7 +279,7 @@ class _AccountState extends ConsumerState<Account> {
                     builder: (context) {
                       return MyParcel(
                         parcels: parcels,
-                        title: "To Pay",
+                        title: "To Recieve",
                       );
                     },
                   ),
@@ -301,7 +301,7 @@ class _AccountState extends ConsumerState<Account> {
                     builder: (context) {
                       return MyParcel(
                         parcels: parcels,
-                        title: "To Pay",
+                        title: "To Review",
                       );
                     },
                   ),

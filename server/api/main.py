@@ -163,7 +163,7 @@ async def get_to_deliver_parcel(user_id: int):
 
 @app.get("/to-review")
 async def get_to_review_parcel(user_id: int):
-    result = await parcel_util.get_to_deliver_parcel(user_id)
+    result = await parcel_util.get_to_review_parcel(user_id)
     
     if result is False:
         return Response(status_code=400)

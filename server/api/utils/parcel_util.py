@@ -121,7 +121,7 @@ async def get_to_deliver_parcel(user_id: int):
                              OrderItem.product_id == Product.product_id).\
                         join(Seller, Product.seller_id == Seller.id).\
                         join(User, Seller.user_id == User.id).\
-                        filter(Order.order_status == 'out for delivery',
+                        filter(Order.order_status == 'out_for_delivery',
                                Order.user_id == user_id)
 
         result = session.execute(query)
