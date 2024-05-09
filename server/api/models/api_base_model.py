@@ -35,3 +35,14 @@ class PlaceOrder(BaseModel):
 class Schedule(BaseModel):
     seller_id: int
     schedule: str
+    
+class MyProduct(BaseModel):
+    product_id: int
+    name: str
+    description: str
+    price: float
+    stock: int
+    unit: str
+    image: str | None
+    category: str
+    shipping_fee: float

@@ -1,7 +1,7 @@
 from dotenv import load_dotenv, dotenv_values
 import os
 import cloudinary
-from cloudinary.uploader import upload
+from cloudinary.uploader import upload, destroy
 
 load_dotenv()
 
@@ -25,3 +25,6 @@ def upload_image(byte_array, folder_name):
         return None
 
     return response['secure_url']
+
+def delete_image(public_id):
+    destroy(public_id=public_id)
