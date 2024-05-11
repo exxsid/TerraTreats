@@ -57,6 +57,8 @@ async def update_my_products(updated_product: MyProduct):
                 filter(Category.category_name == updated_product.category)
         ).first()
         
+        print('IIIMMMAAGGEEE', updated_product.image)
+        
         if updated_product.image is None \
             or len(updated_product.image) == 0:
             query = update(Product).where(Product.product_id == updated_product.product_id).\

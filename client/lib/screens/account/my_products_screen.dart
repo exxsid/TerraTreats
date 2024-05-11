@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:terratreats/screens/account/edit_my_products_screen.dart';
-import 'package:terratreats/services/seller/my_products_server.dart';
+import 'package:terratreats/services/seller/my_products_service.dart';
 import 'package:terratreats/widgets/appbar.dart';
 import 'package:terratreats/widgets/product_card.dart';
 

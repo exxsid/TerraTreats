@@ -3,7 +3,7 @@ class MyProductModel {
   final String name;
   final String description;
   final double price;
-  final double stock;
+  final int stock;
   final String unit;
   final String? image;
   final String category;
