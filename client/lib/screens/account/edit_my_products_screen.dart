@@ -17,6 +17,7 @@ import 'package:terratreats/widgets/appbar.dart';
 
 class EditMyProducts extends ConsumerStatefulWidget {
   final int productId;
+
   const EditMyProducts({super.key, required this.productId});
 
   @override
@@ -54,6 +55,18 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
 
             final product = snapshot.data!;
 
+            final productNameController =
+                TextEditingController(text: product.name);
+            final priceController =
+                TextEditingController(text: product.price.toString());
+            final unitController = TextEditingController(text: product.unit);
+            final descriptionController =
+                TextEditingController(text: product.description);
+            final stockController =
+                TextEditingController(text: product.stock.toString());
+            final shippingFeeController =
+                TextEditingController(text: product.shippingFee.toString());
+
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,11 +82,11 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          productNameFormField(product.name),
+                          productNameFormField(productNameController),
                           const SizedBox(
                             height: 8,
                           ),
-                          priceUnitFormField(product.price, product.unit),
+                          priceUnitFormField(priceController, unitController),
                           const SizedBox(
                             height: 8,
                           ),
@@ -111,15 +124,15 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
                           const SizedBox(
                             height: 16,
                           ),
-                          descriptionFormField(product.description),
+                          descriptionFormField(descriptionController),
                           const SizedBox(
                             height: 16,
                           ),
-                          stockFormField(product.stock),
+                          stockFormField(stockController),
                           const SizedBox(
                             height: 16,
                           ),
-                          shippingFeeFormField(product.shippingFee),
+                          shippingFeeFormField(shippingFeeController),
                           const SizedBox(
                             height: 16,
                           ),
@@ -128,29 +141,14 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               saveButton(
-                                updatedProduct: MyProductModel(
-                                  productId: product.productId,
-                                  name:
-                                      ref.watch(myProductNotifierProvider).name,
-                                  description: ref
-                                      .watch(myProductNotifierProvider)
-                                      .description,
-                                  price: ref
-                                      .watch(myProductNotifierProvider)
-                                      .price,
-                                  stock: ref
-                                      .watch(myProductNotifierProvider)
-                                      .stock,
-                                  unit:
-                                      ref.watch(myProductNotifierProvider).unit,
-                                  image: convertImageToBase64(),
-                                  category: ref
-                                      .watch(myProductNotifierProvider)
-                                      .category,
-                                  shippingFee: ref
-                                      .watch(myProductNotifierProvider)
-                                      .shippingFee,
-                                ),
+                                productId: product.productId,
+                                productNameController: productNameController,
+                                descriptionController: descriptionController,
+                                priceController: priceController,
+                                unitController: unitController,
+                                stockController: stockController,
+                                shippingFeeController: shippingFeeController,
+                                category: product.category,
                               ),
                               const SizedBox(
                                 width: 8,
@@ -201,7 +199,9 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
               style: TextStyle(
                 color: AppTheme.secondary,
               ),
-              value: ref.watch(myProductNotifierProvider).category,
+              value: ref.watch(myProductNotifierProvider).category.length == 0
+                  ? product.category
+                  : ref.watch(myProductNotifierProvider).category,
               items: categories
                   .map(
                     (category) => DropdownMenuItem(
@@ -234,21 +234,44 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
     );
   }
 
-  OutlinedButton saveButton({required MyProductModel updatedProduct}) {
+  OutlinedButton saveButton({
+    required int productId,
+    required TextEditingController productNameController,
+    required TextEditingController descriptionController,
+    required TextEditingController priceController,
+    required TextEditingController stockController,
+    required TextEditingController unitController,
+    required String category,
+    required TextEditingController shippingFeeController,
+  }) {
     return OutlinedButton(
       onPressed: () async {
         if (!_formKey.currentState!.validate()) {
           return;
         }
-        print("gago ${updatedProduct.name}");
+
         await updateMyProduct(
-          product: updatedProduct,
+          product: MyProductModel(
+            productId: productId,
+            name: productNameController.text,
+            description: descriptionController.text,
+            price: double.parse(priceController.text),
+            stock: int.parse(stockController.text),
+            unit: unitController.text,
+            image: convertImageToBase64(),
+            category: ref.watch(myProductNotifierProvider).category.isEmpty
+                ? category
+                : ref.watch(myProductNotifierProvider).category,
+            shippingFee: double.parse(shippingFeeController.text),
+          ),
         );
-        setState(() {});
-        final snackBar = SnackBar(
-          content: Text("Product updated successfully"),
-        );
+
+        final snackBar =
+            SnackBar(content: Text("Successfully updated product"));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        ref.read(myProductNotifierProvider.notifier).reset();
+        setState(() {});
       },
       child: Text(
         "Save",
@@ -260,7 +283,7 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
     );
   }
 
-  Column shippingFeeFormField(double shippingFee) {
+  Column shippingFeeFormField(TextEditingController shippingFeeController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -276,7 +299,7 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
           height: 8,
         ),
         TextFormField(
-          initialValue: shippingFee.toString(),
+          controller: shippingFeeController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 8),
@@ -295,17 +318,12 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
             fontSize: 15,
           ),
           validator: _formValidator,
-          onChanged: (value) {
-            ref
-                .read(myProductNotifierProvider.notifier)
-                .updateShippingFee(double.parse(value));
-          },
         ),
       ],
     );
   }
 
-  Column stockFormField(int stock) {
+  Column stockFormField(TextEditingController stockController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -321,7 +339,7 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
           height: 8,
         ),
         TextFormField(
-          initialValue: stock.toString(),
+          controller: stockController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 8),
@@ -340,17 +358,12 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
             fontSize: 15,
           ),
           validator: _formValidator,
-          onChanged: (value) {
-            ref
-                .read(myProductNotifierProvider.notifier)
-                .updateStock(int.parse(value));
-          },
         ),
       ],
     );
   }
 
-  Column descriptionFormField(String description) {
+  Column descriptionFormField(TextEditingController descriptionController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -366,7 +379,7 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
           height: 8,
         ),
         TextFormField(
-          initialValue: description,
+          controller: descriptionController,
           maxLines: 20,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 8),
@@ -385,17 +398,13 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
             fontSize: 15,
           ),
           validator: _formValidator,
-          onChanged: (value) {
-            ref
-                .read(myProductNotifierProvider.notifier)
-                .updateDescription(value);
-          },
         ),
       ],
     );
   }
 
-  Row priceUnitFormField(double price, String unit) {
+  Row priceUnitFormField(TextEditingController priceController,
+      TextEditingController unitController) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -413,7 +422,7 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
         Expanded(
           child: TextFormField(
             keyboardType: TextInputType.number,
-            initialValue: price.toString(),
+            controller: priceController,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 8),
               border: OutlineInputBorder(),
@@ -431,11 +440,6 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
               fontSize: 15,
             ),
             validator: _formValidator,
-            onChanged: (value) {
-              ref
-                  .read(myProductNotifierProvider.notifier)
-                  .updatePrice(double.parse(value));
-            },
           ),
         ),
         // per
@@ -453,7 +457,7 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
         // unit
         Expanded(
           child: TextFormField(
-            initialValue: unit,
+            controller: unitController,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 8),
               border: OutlineInputBorder(),
@@ -471,18 +475,16 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
               fontSize: 15,
             ),
             validator: _formValidator,
-            onChanged: (value) {
-              ref.read(myProductNotifierProvider.notifier).updateUnit(value);
-            },
           ),
         ),
       ],
     );
   }
 
-  TextFormField productNameFormField(String name) {
+  TextFormField productNameFormField(
+      TextEditingController _productNameController) {
     return TextFormField(
-      initialValue: name,
+      controller: _productNameController,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 8),
         border: OutlineInputBorder(),
@@ -501,10 +503,6 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
         fontWeight: FontWeight.w700,
       ),
       validator: _formValidator,
-      onChanged: (value) {
-        ref.read(myProductNotifierProvider.notifier).updateName(value);
-        print("NNNAAAAMMMEEE: ${ref.watch(myProductNotifierProvider).name}");
-      },
     );
   }
 

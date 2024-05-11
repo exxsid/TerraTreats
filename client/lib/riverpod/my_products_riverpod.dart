@@ -56,6 +56,19 @@ class MyProductNotifier extends ChangeNotifier {
     this.shippingFee = shippingFee;
     notifyListeners();
   }
+
+  void reset() {
+    productId = 0;
+    name = "";
+    description = "";
+    price = 0;
+    stock = 0;
+    unit = "";
+    image = null;
+    category = "";
+    shippingFee = 0;
+    notifyListeners();
+  }
 }
 
 final myProductNotifierProvider =
