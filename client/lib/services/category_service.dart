@@ -6,7 +6,7 @@ import "package:http/http.dart" as http;
 
 final baseUrl = dotenv.env["BASE_URL"];
 
-Future<List<dynamic>> getCategory() async {
+Future<List<CategoryCardItem>> getCategory() async {
   final uri = Uri.parse("$baseUrl/category");
 
   final response = await http.get(uri);

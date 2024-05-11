@@ -13,6 +13,7 @@ import "package:terratreats/screens/feedback_screen.dart";
 
 import "package:terratreats/screens/login.dart";
 import "package:terratreats/screens/my_parcel_screen.dart";
+import "package:terratreats/screens/account/edit_my_products_screen.dart";
 import "package:terratreats/services/order_service.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/utils/preferences.dart";
@@ -82,7 +83,17 @@ class _AccountState extends ConsumerState<Account> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 4),
-        accountButton(title: const Text("My Products"), onTap: () {}),
+        accountButton(
+          title: const Text("My Products"),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditMyProducts(),
+              ),
+            );
+          },
+        ),
         const SizedBox(height: 4),
         accountButton(
           title: const Text("My Orders"),
