@@ -163,8 +163,7 @@ class _AccountState extends ConsumerState<Account> {
                   content: const SingleChildScrollView(
                     child: ListBody(
                       children: [
-                        Text('This is a demo alert dialog.'),
-                        Text('Would you like to approve of this message?'),
+                        Text('Are you sure you want to logout?'),
                       ],
                     ),
                   ),
@@ -175,12 +174,13 @@ class _AccountState extends ConsumerState<Account> {
                         ref
                             .read(navigationNotifierProvider.notifier)
                             .updateNavigationIndex(0);
+
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) {
                             return const Login();
                           }),
-                          ModalRoute.withName("/"),
+                          (Route<dynamic> route) => route is Login,
                         );
                       },
                     ),
