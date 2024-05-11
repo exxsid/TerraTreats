@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:terratreats/riverpod/categorycard_notifier.dart";
+import "package:terratreats/riverpod/selected_product_notifier.dart";
+import "package:terratreats/screens/selected_product_screen.dart";
 import "package:terratreats/services/category_service.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/widgets/product_card.dart";
@@ -18,7 +20,10 @@ class _ProductsCategoryState extends ConsumerState<ProductsCategory> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.highlight,
-        title: Text(ref.watch(categoryProductProvider.notifier).state, style: TextStyle(color: AppTheme.primary, fontSize: 20),),
+        title: Text(
+          ref.watch(categoryProductProvider.notifier).state,
+          style: TextStyle(color: AppTheme.primary, fontSize: 20),
+        ),
       ),
       body: Container(
         color: AppTheme.highlight,
@@ -48,6 +53,17 @@ class _ProductsCategoryState extends ConsumerState<ProductsCategory> {
                     seller: prod.seller,
                     imgUrl: prod.imgUrl,
                     sold: prod.sold,
+                    onTap: () {
+                      print("product tapped ${prod.productId}");
+                      ref.read(selectedProductNotifierProvider.notifier).id =
+                          prod.productId;
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectedProduct()),
+                      );
+                    },
                   ),
                 );
               }),

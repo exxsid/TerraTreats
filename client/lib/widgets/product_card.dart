@@ -13,6 +13,7 @@ class ProductCard extends ConsumerWidget {
   final String seller;
   final String imgUrl;
   final int sold;
+  final VoidCallback onTap;
 
   const ProductCard({
     super.key,
@@ -24,6 +25,7 @@ class ProductCard extends ConsumerWidget {
     required this.seller,
     required this.imgUrl,
     required this.sold,
+    required this.onTap,
   });
 
   @override
@@ -99,15 +101,7 @@ class ProductCard extends ConsumerWidget {
           ],
         ),
       ),
-      onTap: () {
-        print("product tapped ${this.id}");
-        ref.read(selectedProductNotifierProvider.notifier).id = this.id;
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SelectedProduct()),
-        );
-      },
+      onTap: onTap,
     );
   }
 }

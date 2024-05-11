@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:terratreats/models/featured_product_model.dart';
 import 'package:terratreats/riverpod/featured_notifier.dart';
+import 'package:terratreats/riverpod/selected_product_notifier.dart';
+import 'package:terratreats/screens/selected_product_screen.dart';
 
 import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/featured_card.dart';
@@ -107,6 +109,17 @@ class _HomeState extends ConsumerState<Home> {
                   seller: prod.seller,
                   imgUrl: prod.imgUrl,
                   sold: prod.sold,
+                  onTap: () {
+                    ref.read(selectedProductNotifierProvider.notifier).id =
+                        prod.prductId;
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SelectedProduct(),
+                      ),
+                    );
+                  },
                 ),
               );
             }),

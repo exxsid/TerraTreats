@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:ionicons/ionicons.dart";
+import "package:terratreats/riverpod/selected_product_notifier.dart";
+import "package:terratreats/screens/selected_product_screen.dart";
 import "package:terratreats/services/recommended_product_service.dart";
 import "package:terratreats/services/search_service.dart";
 import "package:terratreats/utils/app_theme.dart";
@@ -101,6 +103,17 @@ class _SearchState extends ConsumerState<Search> {
                   seller: prod.seller,
                   imgUrl: prod.imgUrl,
                   sold: prod.sold,
+                  onTap: () {
+                    print("product tapped ${prod.productId}");
+                    ref.read(selectedProductNotifierProvider.notifier).id =
+                        prod.productId;
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectedProduct()),
+                    );
+                  },
                 ),
               );
             }),
@@ -151,7 +164,7 @@ class _SearchState extends ConsumerState<Search> {
                     onPressed: () {
                       setState(() {
                         _searchController.text = history[index];
-                      _isSearch = true;
+                        _isSearch = true;
                       });
                     },
                     child: Text(

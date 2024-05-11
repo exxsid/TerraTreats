@@ -12,7 +12,8 @@ import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/appbar.dart';
 
 class EditMyProducts extends ConsumerStatefulWidget {
-  const EditMyProducts({super.key});
+  final int productId;
+  const EditMyProducts({super.key, required this.productId});
 
   @override
   ConsumerState<EditMyProducts> createState() => _MyProductsState();
@@ -37,7 +38,7 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
       appBar: MyAppBar.customAppBar(title: "My Product"),
       body: Container(
         child: FutureBuilder(
-          future: getSelectedProduct(11),
+          future: getSelectedProduct(widget.productId),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.hasError) {
               return Container(
