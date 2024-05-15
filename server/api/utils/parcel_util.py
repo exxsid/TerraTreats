@@ -38,7 +38,7 @@ async def get_to_pay_parcel(user_id: int):
                         Product.image_url, Product.price, Product.unit, 
                         Product.rating, User.first_name, User.last_name, 
                         Order.shipping_fee, OrderItem.quantity, 
-                        OrderItem.order_size).\
+                        OrderItem.order_size, Order.order_id).\
                         select_from(Order).\
                         join(OrderItem, Order.order_id == OrderItem.order_id).\
                         join(Product, 
@@ -62,7 +62,8 @@ async def get_to_pay_parcel(user_id: int):
             'order_size': col[10],
             'total_price': calculate_total_price(
                 col[3], col[9], col[8], col[10]
-            )
+            ),
+            'order_id': col[11],
         }
 
         res.append(temp)
@@ -76,7 +77,7 @@ async def get_to_ship_parcel(user_id: int):
                         Product.image_url, Product.price, Product.unit, 
                         Product.rating, User.first_name, User.last_name, 
                         Order.shipping_fee, OrderItem.quantity, 
-                        OrderItem.order_size).\
+                        OrderItem.order_size, Order.order_id).\
                         select_from(Order).\
                         join(OrderItem, Order.order_id == OrderItem.order_id).\
                         join(Product, 
@@ -100,7 +101,8 @@ async def get_to_ship_parcel(user_id: int):
             'order_size': col[10],
             'total_price': calculate_total_price(
                 col[3], col[9], col[8], col[10]
-            )
+            ),
+            'order_id': col[11],
         }
 
         res.append(temp)
@@ -114,7 +116,7 @@ async def get_to_deliver_parcel(user_id: int):
                         Product.image_url, Product.price, Product.unit, 
                         Product.rating, User.first_name, User.last_name, 
                         Order.shipping_fee, OrderItem.quantity, 
-                        OrderItem.order_size).\
+                        OrderItem.order_size, Order.order_id).\
                         select_from(Order).\
                         join(OrderItem, Order.order_id == OrderItem.order_id).\
                         join(Product, 
@@ -138,7 +140,8 @@ async def get_to_deliver_parcel(user_id: int):
             'order_size': col[10],
             'total_price': calculate_total_price(
                 col[3], col[9], col[8], col[10]
-            )
+            ),
+            'order_id': col[11],
         }
 
         res.append(temp)
@@ -152,7 +155,7 @@ async def get_to_review_parcel(user_id: int):
                         Product.image_url, Product.price, Product.unit, 
                         Product.rating, User.first_name, User.last_name, 
                         Order.shipping_fee, OrderItem.quantity, 
-                        OrderItem.order_size).\
+                        OrderItem.order_size, Order.order_id).\
                         select_from(Order).\
                         join(OrderItem, Order.order_id == OrderItem.order_id).\
                         join(Product, 
@@ -176,7 +179,8 @@ async def get_to_review_parcel(user_id: int):
             'order_size': col[10],
             'total_price': calculate_total_price(
                 col[3], col[9], col[8], col[10]
-            )
+            ),
+            "order_id": col[11]
         }
 
         res.append(temp)
