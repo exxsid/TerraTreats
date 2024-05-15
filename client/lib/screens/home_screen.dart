@@ -54,10 +54,7 @@ class _HomeState extends ConsumerState<Home> {
                 fontSize: 16,
               ),
             ),
-            Container(
-              height: 500,
-              child: populateRecommendedProducts(),
-            )
+            populateRecommendedProducts(),
           ],
         ),
       ),
@@ -95,6 +92,8 @@ class _HomeState extends ConsumerState<Home> {
           }
           final recommendedProducts = snapshot.data!;
           return GridView.count(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
             childAspectRatio: 0.7,
             children: List.generate(recommendedProducts.length, (index) {
