@@ -8,7 +8,7 @@ from utils import parcel_util
 from utils import authentication as auth
 from utils import home_util, cart_util, search_util
 from models.api_base_model import Login, PlaceOrder, Signup, AddToCart
-from router import deliver_schedule, my_orders, my_products_router
+from router import deliver_schedule, my_orders, my_products_router, review_router
 
 app = FastAPI()
 
@@ -182,3 +182,4 @@ async def search_product(search_str: str):
 app.include_router(deliver_schedule.router)
 app.include_router(my_orders.router)
 app.include_router(my_products_router.router)
+app.include_router(review_router.router)

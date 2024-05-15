@@ -46,3 +46,9 @@ class MyProduct(BaseModel):
     image: str | None
     category: str
     shipping_fee: float
+    
+class Review(BaseModel):
+    user_id: int
+    product_id: int
+    rating: float
+    message: str
