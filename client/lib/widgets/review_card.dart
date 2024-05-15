@@ -52,22 +52,34 @@ class ReviewCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  RatingBar.builder(
-                    ignoreGestures: true,
-                    initialRating: rating,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 10,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                    itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
-                    onRatingUpdate: (rating) {
-                      print(rating);
-                    },
+                  Row(
+                    children: [
+                      RatingBar.builder(
+                        ignoreGestures: true,
+                        initialRating: rating,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemSize: 10,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          print(rating);
+                        },
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Text(
+                        rating.toString(),
+                        style:
+                            TextStyle(fontSize: 10, color: AppTheme.secondary),
+                      ),
+                    ],
                   ),
                   Text(
                     content,

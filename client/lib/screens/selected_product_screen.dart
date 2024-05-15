@@ -6,9 +6,11 @@ import "package:terratreats/riverpod/navigation_notifier.dart";
 import "package:terratreats/riverpod/selected_product_notifier.dart";
 import "package:terratreats/screens/place_order_screen.dart";
 import "package:terratreats/screens/reviews_screen.dart";
+import "package:terratreats/services/reviews_service.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/services/selected_product_service.dart";
 import "package:ionicons/ionicons.dart";
+import "package:terratreats/widgets/loading_indacators.dart";
 import "package:terratreats/widgets/primary_button.dart";
 import "package:terratreats/services/cart/cart_service.dart";
 import "package:terratreats/utils/preferences.dart";
@@ -49,7 +51,7 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                         width: double.infinity,
                         height: 400,
                         child: FadeInImage(
-                          image: NetworkImage(data.imgUrl),
+                          image: AssetImage("assets/images/placeholder.jpg"),
                           placeholder:
                               AssetImage("assets/images/placeholder.jpg"),
                           fit: BoxFit.cover,
@@ -279,8 +281,6 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
   }
 
   Container reviewBlock() {
-    String test =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel  hendrerit tellus. Curabitur id enim mattis, facilisis ipsum in,  consequat nisl. Aliquam pharetra dui vitae venenatis elementum. Sed  eleifend non est a placerat.";
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,7 +309,47 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
           SizedBox(
             height: 8,
           ),
-          ReviewCard(content: "ang baho", reviewer: "wala kang pake", rating: 1)
+          Container(
+            height: 200,
+            child: FutureBuilder(
+              future: getReviews(ref.watch(selectedProductNotifierProvider).id),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return LoadingIndicator.circularLoader();
+                }
+
+                if (snapshot.hasError) {
+                  return Container(
+                    child: Center(
+                      child: Text("There is an error getting the reviews"),
+                    ),
+                  );
+                }
+
+                if (snapshot.data!.isEmpty) {
+                  return Container(
+                    child: Center(
+                      child: Text("No Reviews"),
+                    ),
+                  );
+                }
+
+                final reviews = snapshot.data!.take(3).toList();
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: reviews.length,
+                  itemBuilder: (context, index) {
+                    final review = reviews[index];
+                    return ReviewCard(
+                        content: review.message,
+                        reviewer: review.userName,
+                        rating: review.rating.toDouble());
+                  },
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
