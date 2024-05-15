@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 import uuid
 
-from models.models import Review
+from models.models import Review, User
 from models.api_base_model import Review as rev
 
 engine = engine = create_engine('postgresql+psycopg://leo:1234@127.0.0.1:5432/terratreats',
@@ -13,11 +13,28 @@ engine = engine = create_engine('postgresql+psycopg://leo:1234@127.0.0.1:5432/te
 
 async def get_reviews(product_id: int):
     with Session(engine) as session:
-        result = session.query(Review).\
-            filter(Review.product_id == product_id).\
-            all()
+        query = select(
+                Review.review_id, User.first_name, User.last_name,
+                Review.rating, Review.message,
+            ).\
+            select_from(Review).\
+            join(User, Review.user_id == User.id).\
+            order_by(Review.update_at).\
+            filter(Review.product_id == product_id)
             
-    return result
+        result = session.execute(query).all()
+        
+        res = []
+        for col in result:
+            temp = {
+                'review_id': col[0],
+                'user_name': f"{col[1]} {col[2]}",
+                'rating': col[3],
+                'message': col[4],
+            }
+            res.append(temp)
+            
+    return res
 
 async def add_review(new_review: rev):
     try:
