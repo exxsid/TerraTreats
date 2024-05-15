@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, select
 from sqlalchemy import func
 
-from models.models import Category, Product, Seller, User
+from models.models import Category, Product, Seller, User, DeliverySchedule
 
 engine = engine = create_engine('postgresql+psycopg://leo:1234@127.0.0.1:5432/terratreats',
                                 echo=True)
@@ -48,14 +48,22 @@ async def get_recommended_products():
 
 async def get_product_by_id(id: int):
     with Session(engine) as session:
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold, Product.shipping_fee).\
+        query = select(
+            Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold, Product.shipping_fee, Seller.id
+                       ).\
             select_from(Product).\
             join(Category, Product.category_id == Category.category_id).\
             join(Seller, Product.seller_id == Seller.id).\
             join(User, Seller.user_id == User.id).\
             filter(Product.product_id == id)
 
-        result = session.execute(query)
+        result = session.execute(query).all()
+        
+        query_schedule = select(DeliverySchedule.schedule).\
+            select_from(DeliverySchedule).\
+            filter(DeliverySchedule.seller_id == result[0][13])
+            
+        result_schedule = session.execute(query_schedule)
     res = {}
     for col in result:
         res = {
@@ -70,7 +78,8 @@ async def get_product_by_id(id: int):
             "category": col[8],
             "seller": f"{col[9]} {col[10]}",
             "sold": col[11],
-            "shipping_fee": col[12]
+            "shipping_fee": col[12],
+            "schedule": [sched[0] for sched in result_schedule]
         }
 
     return res
