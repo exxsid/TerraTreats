@@ -112,7 +112,7 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                           descriptionBlock(data.description),
                           const SizedBox(height: 16),
                           deliveryScheduleBlock(
-                            ["7:00 am - 8:00 am", "11:00 am - 12:00 pm"],
+                            data.deliverySchedules ?? [],
                           ),
                           SizedBox(height: 16),
                           reviewBlock(),
@@ -180,7 +180,6 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                             onPressed: () async {
                               try {
                                 final userId = Token.getUserToken();
-                                print("selected $userId");
                                 final res = await addToCart(id, userId!);
                                 if (!res) {
                                   return;
@@ -246,7 +245,7 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
     );
   }
 
-  Container deliveryScheduleBlock(List<String> sched) {
+  Container deliveryScheduleBlock(List<dynamic> sched) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

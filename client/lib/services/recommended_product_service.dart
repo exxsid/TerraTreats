@@ -5,7 +5,7 @@ import "package:flutter_dotenv/flutter_dotenv.dart";
 
 final baseUrl = dotenv.env['BASE_URL'];
 
-Future<List<dynamic>> getRecommendedProducts() async {
+Future<List<Product>> getRecommendedProducts() async {
   final uri = Uri.parse("$baseUrl/reco-product");
 
   final response = await http.get(uri);

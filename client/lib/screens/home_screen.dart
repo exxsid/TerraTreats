@@ -111,7 +111,7 @@ class _HomeState extends ConsumerState<Home> {
                   sold: prod.sold,
                   onTap: () {
                     ref.read(selectedProductNotifierProvider.notifier).id =
-                        prod.prductId;
+                        prod.productId;
 
                     Navigator.push(
                       context,

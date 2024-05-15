@@ -25,6 +25,7 @@ Future<Product> getSelectedProduct(int id) async {
       seller: json['seller'] as String,
       sold: json['sold'] as int,
       shippingFee: json['shipping_fee'] as double,
+      deliverySchedules: json['schedule'] as List<dynamic>,
     );
   } else {
     throw Exception("Failed to get recommended products.");
