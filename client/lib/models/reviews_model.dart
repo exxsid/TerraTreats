@@ -1,7 +1,7 @@
 class ReviewModel {
   final int reviewId;
   final String userName;
-  final dynamic rating;
+  final double rating;
   final String message;
 
   ReviewModel({
@@ -12,11 +12,10 @@ class ReviewModel {
   });
 
   factory ReviewModel.getReviews(Map<String, dynamic> json) {
-    print("HAHAHAHAHAHAH ${json['rating'].runtimeType}");
     return ReviewModel(
       reviewId: json['review_id'] as int,
       userName: json['user_name'] as String,
-      rating: json['rating'] as dynamic,
+      rating: json['rating'] as double,
       message: json['message'] as String,
     );
   }

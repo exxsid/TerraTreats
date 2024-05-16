@@ -344,7 +344,7 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                     return ReviewCard(
                         content: review.message,
                         reviewer: review.userName,
-                        rating: review.rating.toDouble());
+                        rating: review.rating);
                   },
                 );
               },
