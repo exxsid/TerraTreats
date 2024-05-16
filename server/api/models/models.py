@@ -133,7 +133,7 @@ class Review(Base):
         primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     product_id: Mapped[int] = mapped_column(ForeignKey("products.product_id"))
-    rating: Mapped[int] = mapped_column(Integer())
+    rating: Mapped[float] = mapped_column(Float())
     title: Mapped[str] = mapped_column(String(), nullable=True)
     message: Mapped[str] = mapped_column(String())
     created_at: Mapped[DateTime] = mapped_column(
