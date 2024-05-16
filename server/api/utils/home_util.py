@@ -143,7 +143,8 @@ async def get_product_by_category(category: str):
             "category": col[8],
             "seller": f"{col[9]} {col[10]}",
             "sold": col[11],
-            "shipping_fee": col[12]
+            "shipping_fee": col[12],
+            'schedule': []
         }
 
         res.append(temp)
