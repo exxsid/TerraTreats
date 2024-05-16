@@ -1,11 +1,11 @@
 import random
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, select, delete
+from sqlalchemy import create_engine, select, delete, update
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 import uuid
 
-from models.models import Review, User
+from models.models import Order, Review, User
 from models.api_base_model import Review as rev
 
 engine = engine = create_engine('postgresql+psycopg://leo:1234@127.0.0.1:5432/terratreats',
@@ -48,6 +48,17 @@ async def add_review(new_review: rev):
                 )
             
             session.add(review)
+            session.flush()
+            
+            # TODO updating order status 
+            query = update(Order).\
+                where(Order.order_id == new_review.order_id).\
+                values(order_status = 'reviewed')
+                
+            result = session.execute(query)
+                
+            if result.rowcount <= 0:
+                return False
             
             session.commit()
             

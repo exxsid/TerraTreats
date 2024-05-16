@@ -52,3 +52,4 @@ class Review(BaseModel):
     product_id: int
     rating: float
     message: str
+    order_id: int

@@ -16,6 +16,7 @@ class OrderStatus(enum.Enum):
     out_for_delivery = 'out for delivery'
     delivered = 'delivered'
     cancelled = 'cancelled'
+    reviewed = 'reviewed'
 
 # OrderStatus = Literal['pending', 'confirmed', 'out for delivery', 'delivered', 'cancelled']
 
