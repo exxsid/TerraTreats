@@ -2,12 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:terratreats/riverpod/review_notifier.dart';
+import 'package:terratreats/services/order_service.dart';
 import 'package:terratreats/utils/app_theme.dart';
 
 class AddReviewCard extends ConsumerWidget {
-  AddReviewCard({super.key});
+  final int orderID;
+  final int productID;
+
+  AddReviewCard({
+    super.key,
+    required this.orderID,
+    required this.productID,
+  });
 
   final _formKey = GlobalKey<FormState>();
+
+  final focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -81,14 +91,23 @@ class AddReviewCard extends ConsumerWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primary,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (!_formKey.currentState!.validate()) {
                       return;
                     }
+
+                    // await addReview(
+                    //     ref.watch(reviewRatingNotifierProvider).rating,
+                    //     ref.watch(reviewMessageProvider.notifier).state,
+                    //     orderID,
+                    //     productID);
+
                     final snackBar = SnackBar(
                       content: Text('Thank you for your review.'),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                    Navigator.pop(context);
                   },
                   child: Text(
                     "Submit review",

@@ -8,6 +8,7 @@ class Parcel {
   final String seller;
   final String orderSize;
   final double totalPrice;
+  final int orderID;
 
   Parcel({
     required this.productId,
@@ -19,6 +20,7 @@ class Parcel {
     required this.seller,
     required this.orderSize,
     required this.totalPrice,
+    required this.orderID,
   });
 
   factory Parcel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class Parcel {
       seller: json['seller'] as String,
       orderSize: json['order_size'] as String,
       totalPrice: json['total_price'] as double,
+      orderID: json['order_id'] as int,
     );
   }
 }

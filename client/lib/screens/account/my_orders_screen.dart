@@ -15,7 +15,7 @@ class _MyOrdersState extends State<MyOrders> {
     'pending',
     'confirmed',
     'out for delivery',
-    'delivered'
+    'delivered',
   ];
 
   @override
@@ -93,30 +93,32 @@ class _MyOrdersState extends State<MyOrders> {
                     ),
                     TableViewCell(
                       padding: EdgeInsets.all(8),
-                      child: DropdownButton(
-                        value: order.status,
-                        items: _orderStatus
-                            .map(
-                              (status) => DropdownMenuItem(
-                                value: status,
-                                child: Text(status),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) async {
-                          try {
-                            await updateMyOrderStatus(order.orderId, value!.replaceAll(RegExp(" "), "_"));
-                            setState(() {
-                              
-                            });
-                          } on Exception catch (e) {
-                            final snackBar =
-                                SnackBar(content: Text(e.toString()));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        },
-                      ),
+                      child: (order.status == 'reviewed'
+                          ? Text(order.status)
+                          : DropdownButton(
+                              value: order.status,
+                              items: _orderStatus
+                                  .map(
+                                    (status) => DropdownMenuItem(
+                                      value: status,
+                                      child: Text(status),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) async {
+                                try {
+                                  await updateMyOrderStatus(order.orderId,
+                                      value!.replaceAll(RegExp(" "), "_"));
+                                  setState(() {});
+                                } on Exception catch (e) {
+                                  final snackBar =
+                                      SnackBar(content: Text(e.toString()));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              },
+                              disabledHint: Text("disabled"),
+                            )),
                     ),
                   ],
                 );

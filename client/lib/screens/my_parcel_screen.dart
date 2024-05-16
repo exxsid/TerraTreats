@@ -1,10 +1,13 @@
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
+import "package:terratreats/models/parcel_model.dart";
+import "package:terratreats/screens/add_review_screen.dart";
 import "package:terratreats/utils/app_theme.dart";
+import "package:terratreats/widgets/add_review_card.dart";
 
 class MyParcel extends StatefulWidget {
   final String title;
-  final List<dynamic> parcels;
+  final List<Parcel> parcels;
 
   const MyParcel({
     super.key,
@@ -42,7 +45,24 @@ class _MyParcelState extends State<MyParcel> {
                   itemCount: widget.parcels.length,
                   itemBuilder: (context, index) {
                     return parcelCard(
-                      onTap: () {},
+                      onTap: widget.title.contains("Review")
+                          ? () {
+                              print(widget.parcels[index].orderID);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return AddReviewScreen(
+                                      orderID: widget.parcels[index].orderID,
+                                      productID:
+                                          widget.parcels[index].productId,
+                                    );
+                                  },
+                                ),
+                              );
+                              setState(() {});
+                            }
+                          : () {},
                       productName: widget.parcels[index].productName,
                       imgUrl: widget.parcels[index].imgUrl,
                       price: widget.parcels[index].price,

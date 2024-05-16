@@ -4,6 +4,7 @@ import "dart:convert";
 import "package:http/http.dart" as http;
 import "package:terratreats/models/order_model.dart";
 import "package:terratreats/models/parcel_model.dart";
+import "package:terratreats/utils/preferences.dart";
 
 final baseUrl = dotenv.env["BASE_URL"];
 
@@ -34,8 +35,7 @@ Future<bool> addToOrder(Order order) async {
   }
 }
 
-
-Future<List<Parcel>> getToPayParcel(int userId) async{
+Future<List<Parcel>> getToPayParcel(int userId) async {
   final uri = Uri.parse('$baseUrl/to-pay?user_id=$userId');
 
   final response = await http.get(uri);
@@ -48,7 +48,7 @@ Future<List<Parcel>> getToPayParcel(int userId) async{
   }
 }
 
-Future<List<Parcel>> getToShipParcel(int userId) async{
+Future<List<Parcel>> getToShipParcel(int userId) async {
   final uri = Uri.parse('$baseUrl/to-ship?user_id=$userId');
 
   final response = await http.get(uri);
@@ -61,7 +61,7 @@ Future<List<Parcel>> getToShipParcel(int userId) async{
   }
 }
 
-Future<List<Parcel>> getToDeliverParcel(int userId) async{
+Future<List<Parcel>> getToDeliverParcel(int userId) async {
   final uri = Uri.parse('$baseUrl/to-deliver?user_id=$userId');
 
   final response = await http.get(uri);
@@ -74,7 +74,7 @@ Future<List<Parcel>> getToDeliverParcel(int userId) async{
   }
 }
 
-Future<List<Parcel>> getToReviewParcel(int userId) async{
+Future<List<Parcel>> getToReviewParcel(int userId) async {
   final uri = Uri.parse('$baseUrl/to-review?user_id=$userId');
 
   final response = await http.get(uri);
@@ -84,5 +84,34 @@ Future<List<Parcel>> getToReviewParcel(int userId) async{
     return data.map((item) => Parcel.fromJson(item)).toList();
   } else {
     throw Exception("Failed to get recommended products.");
+  }
+}
+
+Future<bool> addReview(
+  double rating,
+  String message,
+  int orderID,
+  int productId,
+) async {
+  final uri = Uri.parse("$baseUrl/reviews");
+
+  final response = await http.post(
+    uri,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: jsonEncode(<String, dynamic>{
+      "user_id": Token.getUserToken(),
+      "product_id": productId,
+      'rating': rating,
+      'message': message,
+      'order_id': orderID,
+    }),
+  );
+
+  if (response.statusCode == 201) {
+    return true;
+  } else {
+    throw Exception("Can't add your review");
   }
 }

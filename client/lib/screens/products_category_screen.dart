@@ -4,6 +4,7 @@ import "package:terratreats/riverpod/selected_product_notifier.dart";
 import "package:terratreats/screens/selected_product_screen.dart";
 import "package:terratreats/services/category_service.dart";
 import "package:terratreats/utils/app_theme.dart";
+import "package:terratreats/widgets/loading_indacators.dart";
 import "package:terratreats/widgets/product_card.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
@@ -32,6 +33,10 @@ class _ProductsCategoryState extends ConsumerState<ProductsCategory> {
               ref.watch(categoryProductProvider.notifier).state),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.hasError) {
+              return LoadingIndicator.circularLoader();
+            }
+
+            if (snapshot.data!.isEmpty) {
               return Center(
                 child: Text("No Product Found"),
               );
