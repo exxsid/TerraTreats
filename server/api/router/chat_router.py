@@ -143,8 +143,8 @@ async def private_chat(chat: SendChat):
     
 # get the chat history for private message
 @router.get("/chat/history")
-async def get_chat_history(chat_history: ChatHistory):
-    result = await manager.chat_history(chat_history.chat_id)
+async def get_chat_history(chat_id: str):
+    result = await manager.chat_history(chat_id)
 
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
