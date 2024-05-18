@@ -47,6 +47,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^25.1.42
   scrollable_table_view: ^2.0.3
   image_picker: ^1.1.1
+  web_socket_channel: ^3.0.0
 
 dev_dependencies:
   flutter_test:
