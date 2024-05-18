@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 import json
 from fastapi.encoders import jsonable_encoder
@@ -8,7 +8,7 @@ from utils import parcel_util
 from utils import authentication as auth
 from utils import home_util, cart_util, search_util
 from models.api_base_model import Login, PlaceOrder, Signup, AddToCart
-from router import deliver_schedule, my_orders, my_products_router, review_router
+from router import deliver_schedule, my_orders, my_products_router, review_router, chat_router
 
 app = FastAPI()
 
@@ -179,7 +179,35 @@ async def search_product(search_str: str):
 
     return result
 
+# @app.websocket("/ws")
+# async def chat(websocket: WebSocket):
+#     await manager.connect(websocket)
+#     try:
+#         while True:
+#             data = await websocket.receive_text()
+#             await manager.broadcast(data)
+#     except WebSocketDisconnect:
+#         manager.disconnect(websocket)
+
+# class ConnectionManager:
+#     def __init__(self):
+#         self.connections = []
+
+#     async def connect(self, websocket):
+#         await websocket.accept()
+#         self.connections.append(websocket)
+
+#     async def broadcast(self, data):
+#         for connection in self.connections:
+#             await connection.send_text(data)
+
+#     def disconnect(self, websocket):
+#         self.connections.remove(websocket)
+
+# manager = ConnectionManager()
+
 app.include_router(deliver_schedule.router)
 app.include_router(my_orders.router)
 app.include_router(my_products_router.router)
 app.include_router(review_router.router)
+app.include_router(chat_router.router)

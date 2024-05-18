@@ -53,3 +53,13 @@ class Review(BaseModel):
     rating: float
     message: str
     order_id: int
+    
+
+class ChatHistory(BaseModel):
+    chat_id: str
+    
+class SendChat(BaseModel):
+    chat_id: str
+    sender_id: int
+    recipient_id: int
+    message: str
