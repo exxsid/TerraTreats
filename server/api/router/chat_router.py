@@ -106,7 +106,7 @@ class ConnectionManager:
         if not chat_doc:
             return []
 
-        sorted_messages = sorted(chat_doc["messages"], key=lambda msg: msg["timestamp"])
+        sorted_messages = sorted(chat_doc["messages"], key=lambda msg: msg["timestamp"], reverse=True)
 
         return [
                 {
