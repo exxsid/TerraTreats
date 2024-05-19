@@ -34,7 +34,11 @@ Future<List<Map<String, dynamic>>> getChatHistory(
   final response = await http.get(uri);
 
   if (response.statusCode == 200) {
-    return jsonDecode(response.body) as List<Map<String, dynamic>>;
+    final data = jsonDecode(response.body) as List<dynamic>;
+    return data
+        .whereType<Map<String, dynamic>>()
+        .cast<Map<String, dynamic>>()
+        .toList();
   } else {
     throw Exception("Can't get chat");
   }
