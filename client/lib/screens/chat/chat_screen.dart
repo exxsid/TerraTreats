@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'package:terratreats/riverpod/chat_notifier.dart';
 import 'package:terratreats/services/chat_service.dart';
@@ -18,9 +22,18 @@ class ChatScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
+  final _channel = WebSocketChannel.connect(
+    Uri.parse("$websocketUrl/connect?id=${Token.getUserToken()}"),
+  );
+
+  @override
+  void dispose() {
+    super.dispose();
+    _channel.sink.close();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: MyAppBar.customAppBar(
         title: ref.watch(chatChangeNotifierProvider).recipient,
@@ -34,68 +47,85 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: FutureBuilder(
-                    future: getChatHistory(
-                        chatId: ref.watch(chatChangeNotifierProvider).chatId),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return LoadingIndicator.circularLoader();
-                      }
-
-                      if (snapshot.hasError) {
-                        return Container(
-                          child: const Center(
-                            child: Text("Can't load messages."),
-                          ),
-                        );
-                      }
-
-                      if (snapshot.data!.isEmpty) {
-                        return Container(
-                          child: const Center(
-                            child: Text("No messages."),
-                          ),
-                        );
-                      }
-
-                      final chats = snapshot.data!;
-
-                      return ListView.builder(
-                        reverse: true,
-                        itemCount: chats.length,
-                        itemBuilder: (context, index) {
-                          final chat = chats[index];
-
-                          bool isMyChat =
-                              chat['sender_id'] == Token.getUserToken();
-
-                          DateTime originalDateTime =
-                              DateTime.parse(chat['timestamp']);
-
-                          String formattedDateTime =
-                              DateFormat("MMM d, yyyy hh:mm a")
-                                  .format(originalDateTime);
-                          return bubbleChat(
-                            isMyChat,
-                            context,
-                            chat,
-                            formattedDateTime,
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
+              StreamBuilder<dynamic>(
+                stream: _channel.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final data =
+                        jsonDecode(snapshot.data) as Map<String, dynamic>;
+                    ref
+                        .read(chatHistoryNotifierProvider.notifier)
+                        .appendChat(data);
+                  }
+                  // Return your chat thread widget here
+                  return chatThread();
+                },
               ),
               inputMessageContainer(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Expanded chatThread() {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 8,
+        ),
+        child: FutureBuilder(
+          future: getChatHistory(
+              chatId: ref.watch(chatChangeNotifierProvider).chatId),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return LoadingIndicator.circularLoader();
+            }
+
+            if (snapshot.hasError) {
+              return Container(
+                child: const Center(
+                  child: Text("Can't load messages."),
+                ),
+              );
+            }
+
+            if (snapshot.data!.isEmpty) {
+              return Container(
+                child: const Center(
+                  child: Text("No messages."),
+                ),
+              );
+            }
+            ref
+                .read(chatHistoryNotifierProvider.notifier)
+                .initializedChatHistory(snapshot.data!);
+
+            return ListView.builder(
+              reverse: true,
+              itemCount:
+                  ref.watch(chatHistoryNotifierProvider).chatHistory.length,
+              itemBuilder: (context, index) {
+                final chat =
+                    ref.watch(chatHistoryNotifierProvider).chatHistory[index];
+
+                bool isMyChat = chat['sender_id'] == Token.getUserToken();
+
+                DateTime originalDateTime = DateTime.parse(chat['timestamp']);
+
+                String formattedDateTime =
+                    DateFormat("MMM d, yyyy hh:mm a").format(originalDateTime);
+                return bubbleChat(
+                  isMyChat,
+                  context,
+                  chat,
+                  formattedDateTime,
+                );
+              },
+            );
+          },
         ),
       ),
     );
@@ -182,13 +212,26 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           IconButton(
             onPressed: ref.watch(messageChangeNotifierProvider).message.isEmpty
                 ? null
-                : () {},
+                : () {
+                    _sendMessage();
+                  },
             icon: Icon(FeatherIcons.send),
             disabledColor: Colors.blueGrey,
             color: Colors.black,
           ),
         ],
       ),
+    );
+  }
+
+  void _sendMessage() {
+    String message = ref.watch(messageChangeNotifierProvider).message;
+    Future(() => ref.read(messageChangeNotifierProvider.notifier).message = "");
+
+    sendMessage(
+      ref.watch(chatChangeNotifierProvider).recipientId,
+      message,
+      ref.watch(chatChangeNotifierProvider).chatId,
     );
   }
 }

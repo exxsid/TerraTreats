@@ -6,9 +6,10 @@ import "package:http/http.dart" as http;
 import "package:flutter_dotenv/flutter_dotenv.dart";
 
 final baseUrl = dotenv.env['BASE_URL'];
+final websocketUrl = dotenv.env['WEBSOCKET_SERVER'];
 
 final channel = WebSocketChannel.connect(
-  Uri.parse("$baseUrl/connect?id=${Token.getUserToken()}"),
+  Uri.parse("$websocketUrl/connect?id=${Token.getUserToken()}"),
 );
 
 Future<List<Map<String, dynamic>>> getChats() async {
