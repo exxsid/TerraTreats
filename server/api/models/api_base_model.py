@@ -59,7 +59,7 @@ class ChatHistory(BaseModel):
     chat_id: str
     
 class SendChat(BaseModel):
-    chat_id: str
+    chat_id: str | None
     sender_id: int
     recipient_id: int
     message: str

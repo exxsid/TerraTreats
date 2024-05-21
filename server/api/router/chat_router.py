@@ -43,14 +43,35 @@ class ConnectionManager:
         
         # when the recipient is offline
         if not self.connections.get(chat.recipient_id):
-            print(chat.message)
+            await self.connections.get(chat.sender_id).send_json(jsonable_encoder({
+                "sender_id": chat.sender_id,
+                "recipient_id": chat.recipient_id,
+                "message": chat.message,
+                "timestamp": datetime.now(),
+            }))
             await self.store_message(chat)
-            
-        await self.connections.get(chat.recipient_id).send_text(chat.message)
+            return
+
+        await self.connections.get(chat.recipient_id).send_json(jsonable_encoder({
+            "sender_id": chat.sender_id,
+            "recipient_id": chat.recipient_id,
+            "message": chat.message,
+            "timestamp": datetime.now(),
+            }))
+        await self.connections.get(chat.sender_id).send_json(jsonable_encoder({
+            "sender_id": chat.sender_id,
+            "recipient_id": chat.recipient_id,
+            "message": chat.message,
+            "timestamp": datetime.now(),
+            }))
+        # await self.connections.get(chat.recipient_id).send_text(chat.message)
         await self.store_message(chat)
 
     async def store_message(self, chat: SendChat):
-        chat_doc = await self.db.chat.find_one({"_id": ObjectId(chat.chat_id)})
+        if chat.chat_id == None:
+            chat_doc = None
+        else:
+            chat_doc = await self.db.chat.find_one({"_id": ObjectId(chat.chat_id)})
 
         # when the chat document is already exist
         if chat_doc:
@@ -72,7 +93,7 @@ class ConnectionManager:
                     "timestamp": datetime.now()
                     }]
             }
-            await self.chat_history.insert_one(chat_doc)
+            await self.chat.insert_one(chat_doc)
 
     async def chat_messages(self, user_id: int):
         # to be more efficient, retrieving of chats include only 
@@ -95,7 +116,8 @@ class ConnectionManager:
             
             temp = {
                     'id': str(chat.get('_id')),
-                    'recipient': name
+                    'recipient': name,
+                    'recipeint_id': recipient_id
                 }
             result.append(temp)
         return result
@@ -137,7 +159,8 @@ async def private_chat(chat: SendChat):
 
         return JSONResponse(
             content=jsonable_encoder({'message': chat.message}), status_code=200)
-    except Exception:
+    except Exception as e:
+        print(e)
         return Response(status_code=400)
     
     
