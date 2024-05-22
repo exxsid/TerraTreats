@@ -40,6 +40,8 @@ class Address(Base):
     __tablename__ = 'addresses'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    latitude: Mapped[float] = mapped_column(Float(), nullable=True, default=0)
+    longitude: Mapped[float] = mapped_column(Float(), nullable=True, default=0)
     street: Mapped[str] = mapped_column(String(100), nullable=True)
     barangay: Mapped[str] = mapped_column(String(100), nullable=False)
     city: Mapped[str] = mapped_column(String(100), nullable=False)
