@@ -3,10 +3,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, select
 from sqlalchemy import func
 
-from models.models import Category, Product, Seller, User, DeliverySchedule
+from models.models import Category, Product, Seller, User, DeliverySchedule, Address
 
-engine = engine = create_engine('postgresql+psycopg://leo:1234@127.0.0.1:5432/terratreats',
-                                echo=True)
+engine = engine = create_engine(
+    "postgresql+psycopg://leo:1234@127.0.0.1:5432/terratreats", echo=True
+)
 
 
 async def get_category():
@@ -18,11 +19,27 @@ async def get_category():
 
 async def get_recommended_products():
     with Session(engine) as session:
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold, Product.shipping_fee).\
-            select_from(Product).\
-            join(Category, Product.category_id == Category.category_id).\
-            join(Seller, Product.seller_id == Seller.id).\
-            join(User, Seller.user_id == User.id)
+        query = (
+            select(
+                Product.product_id,
+                Product.product_name,
+                Product.description,
+                Product.price,
+                Product.stock,
+                Product.unit,
+                Product.image_url,
+                Product.rating,
+                Category.category_name,
+                User.first_name,
+                User.last_name,
+                Product.sold,
+                Product.shipping_fee,
+            )
+            .select_from(Product)
+            .join(Category, Product.category_id == Category.category_id)
+            .join(Seller, Product.seller_id == Seller.id)
+            .join(User, Seller.user_id == User.id)
+        )
 
         result = session.execute(query)
     res = []
@@ -40,7 +57,7 @@ async def get_recommended_products():
             "seller": f"{col[9]} {col[10]}",
             "sold": col[11],
             "shipping_fee": col[12],
-            "schedule": []
+            "schedule": [],
         }
         res.append(temp)
 
@@ -49,21 +66,38 @@ async def get_recommended_products():
 
 async def get_product_by_id(id: int):
     with Session(engine) as session:
-        query = select(
-            Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold, Product.shipping_fee, Seller.id
-                       ).\
-            select_from(Product).\
-            join(Category, Product.category_id == Category.category_id).\
-            join(Seller, Product.seller_id == Seller.id).\
-            join(User, Seller.user_id == User.id).\
-            filter(Product.product_id == id)
+        query = (
+            select(
+                Product.product_id,
+                Product.product_name,
+                Product.description,
+                Product.price,
+                Product.stock,
+                Product.unit,
+                Product.image_url,
+                Product.rating,
+                Category.category_name,
+                User.first_name,
+                User.last_name,
+                Product.sold,
+                Product.shipping_fee,
+                Seller.id,
+            )
+            .select_from(Product)
+            .join(Category, Product.category_id == Category.category_id)
+            .join(Seller, Product.seller_id == Seller.id)
+            .join(User, Seller.user_id == User.id)
+            .filter(Product.product_id == id)
+        )
 
         result = session.execute(query).all()
-        
-        query_schedule = select(DeliverySchedule.schedule).\
-            select_from(DeliverySchedule).\
-            filter(DeliverySchedule.seller_id == result[0][13])
-            
+
+        query_schedule = (
+            select(DeliverySchedule.schedule)
+            .select_from(DeliverySchedule)
+            .filter(DeliverySchedule.seller_id == result[0][13])
+        )
+
         result_schedule = session.execute(query_schedule)
     res = {}
     for col in result:
@@ -80,7 +114,7 @@ async def get_product_by_id(id: int):
             "seller": f"{col[9]} {col[10]}",
             "sold": col[11],
             "shipping_fee": col[12],
-            "schedule": [sched[0] for sched in result_schedule]
+            "schedule": [sched[0] for sched in result_schedule],
         }
 
     return res
@@ -88,18 +122,42 @@ async def get_product_by_id(id: int):
 
 async def get_featured_product():
     with Session(engine) as session:
-        # get the total rows of table
-        num_rows = session.query(func.count(Product.product_id)).scalar()
 
-        # Generate a random offset within the row count
-        random_offset = random.randrange(num_rows)
+        sellers = (
+            session.query(Seller.id)
+            .select_from(Seller)
+            .join(Address, Seller.user_id == Address.user_id)
+            .where(Address.postal_code == "2515")
+            .all()
+        )
+        num_sellers = len(sellers)
 
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold).\
-            select_from(Product).\
-            join(Category, Product.category_id == Category.category_id).\
-            join(Seller, Product.seller_id == Seller.id).\
-            join(User, Seller.user_id == User.id).\
-            offset(random_offset).limit(1)
+        rand_index = random.randrange(0, num_sellers - 1)
+
+        selected_seller = sellers[rand_index][0]
+
+        query = (
+            select(
+                Product.product_id,
+                Product.product_name,
+                Product.description,
+                Product.price,
+                Product.stock,
+                Product.unit,
+                Product.image_url,
+                Product.rating,
+                Category.category_name,
+                User.first_name,
+                User.last_name,
+                Product.sold,
+            )
+            .select_from(Product)
+            .join(Category, Product.category_id == Category.category_id)
+            .join(Seller, Product.seller_id == Seller.id)
+            .join(User, Seller.user_id == User.id)
+            .where(Seller.id == selected_seller)
+            .limit(1)
+        )
 
         col = session.execute(query).fetchone()
 
@@ -114,19 +172,36 @@ async def get_featured_product():
             "rating": col[7],
             "category": col[8],
             "seller": f"{col[9]} {col[10]}",
-            "sold": col[11]
+            "sold": col[11],
         }
 
     return res
 
+
 async def get_product_by_category(category: str):
     with Session(engine) as session:
-        query = select(Product.product_id, Product.product_name, Product.description, Product.price, Product.stock, Product.unit, Product.image_url, Product.rating, Category.category_name, User.first_name, User.last_name, Product.sold, Product.shipping_fee).\
-            select_from(Product).\
-            join(Category, Product.category_id == Category.category_id).\
-            join(Seller, Product.seller_id == Seller.id).\
-            join(User, Seller.user_id == User.id).\
-            filter(Category.category_name.ilike(category))
+        query = (
+            select(
+                Product.product_id,
+                Product.product_name,
+                Product.description,
+                Product.price,
+                Product.stock,
+                Product.unit,
+                Product.image_url,
+                Product.rating,
+                Category.category_name,
+                User.first_name,
+                User.last_name,
+                Product.sold,
+                Product.shipping_fee,
+            )
+            .select_from(Product)
+            .join(Category, Product.category_id == Category.category_id)
+            .join(Seller, Product.seller_id == Seller.id)
+            .join(User, Seller.user_id == User.id)
+            .filter(Category.category_name.ilike(category))
+        )
 
         result = session.execute(query).fetchall()
     res = []
@@ -144,7 +219,7 @@ async def get_product_by_category(category: str):
             "seller": f"{col[9]} {col[10]}",
             "sold": col[11],
             "shipping_fee": col[12],
-            'schedule': []
+            "schedule": [],
         }
 
         res.append(temp)
