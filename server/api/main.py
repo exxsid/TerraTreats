@@ -184,8 +184,8 @@ async def get_to_review_parcel(user_id: int):
 
 
 @app.get("/search")
-async def search_product(search_str: str):
-    result = await search_util.search_product(search_str)
+async def search_product(search_str: str, user_id: int):
+    result = await search_util.search_product(search_str, user_id)
 
     if result is None:
         return Response(status_code=404)
