@@ -39,6 +39,8 @@ async def search_product(search_str: str, user_id: int):
                 Category.category_name,
                 User.first_name,
                 User.last_name,
+                Product.sold,
+                Product.shipping_fee,
             )
             .select_from(Product)
             .join(Category, Product.category_id == Category.category_id)
@@ -73,6 +75,9 @@ async def search_product(search_str: str, user_id: int):
             "rating": col[7],
             "category": col[8],
             "seller": f"{col[9]} {col[10]}",
+            "sold": col[11],
+            "shipping_fee": col[12],
+            "schedule": [],
         }
         res.append(temp)
 
