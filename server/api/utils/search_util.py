@@ -45,10 +45,13 @@ async def search_product(search_str: str, user_id: int):
             .join(Seller, Product.seller_id == Seller.id)
             .join(User, Seller.user_id == User.id)
             .filter(
-                or_(
-                    Product.product_name.ilike(f"%{search_str}%"),
-                    Product.description.ilike(f"%{search_str}%"),
-                ),
+                and_(
+                    or_(
+                        Product.product_name.ilike(f"%{search_str}%"),
+                        Product.description.ilike(f"%{search_str}%"),
+                    ),
+                    Seller.id.in_(recommender_sellers),
+                )
             )
             .order_by(
                 case(*[(Seller.id == id, order) for id, order in order_dict.items()])
