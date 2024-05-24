@@ -2,11 +2,13 @@ import "package:terratreats/models/product_model.dart";
 import "dart:convert";
 import "package:http/http.dart" as http;
 import "package:flutter_dotenv/flutter_dotenv.dart";
+import "package:terratreats/utils/preferences.dart";
 
 final baseUrl = dotenv.env['BASE_URL'];
 
 Future<List<Product>> getRecommendedProducts() async {
-  final uri = Uri.parse("$baseUrl/reco-product");
+  final uri =
+      Uri.parse("$baseUrl/reco-product?user_id=${Token.getUserToken()}");
 
   final response = await http.get(uri);
 
