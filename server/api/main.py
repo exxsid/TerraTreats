@@ -83,8 +83,8 @@ async def get_product_by_id(id: int):
 
 
 @app.get("/cat-product")
-async def get_product_by_category(category: str):
-    result = await home_util.get_product_by_category(category)
+async def get_product_by_category(category: str, user_id: int):
+    result = await home_util.get_product_by_category(category, user_id)
 
     if result is None:
         return Response(status_code=404)
