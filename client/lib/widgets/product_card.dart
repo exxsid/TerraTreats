@@ -57,12 +57,14 @@ class ProductCard extends ConsumerWidget {
                   fit: BoxFit.cover,
                 )),
             Text(
-              this.name.toUpperCase(),
+              this.name,
               style: TextStyle(
                 color: AppTheme.primary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
             Row(children: [
               Expanded(
