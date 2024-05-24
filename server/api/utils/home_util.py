@@ -1,9 +1,10 @@
 import random
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, select, case
 from sqlalchemy import func
 
 from models.models import Category, Product, Seller, User, DeliverySchedule, Address
+from recommender_system import recommender as rs
 
 engine = engine = create_engine(
     "postgresql+psycopg://leo:1234@127.0.0.1:5432/terratreats", echo=True
@@ -17,8 +18,19 @@ async def get_category():
     return result
 
 
-async def get_recommended_products():
+async def get_recommended_products(user_id: int):
     with Session(engine) as session:
+        user_loc = (
+            session.query(Address.latitude, Address.longitude)
+            .select_from(Address)
+            .where(Address.user_id == user_id)
+            .all()
+        )
+        recommender_sellers = rs.find_sellers_within_distance(user_loc[0])
+
+        order_dict = {id: i for i, id in enumerate(recommender_sellers)}
+
+        print(recommender_sellers)
         query = (
             select(
                 Product.product_id,
@@ -39,6 +51,13 @@ async def get_recommended_products():
             .join(Category, Product.category_id == Category.category_id)
             .join(Seller, Product.seller_id == Seller.id)
             .join(User, Seller.user_id == User.id)
+            .filter(Seller.id.in_(recommender_sellers))
+            .order_by(
+                case(
+                    *[(Seller.id == id, order) for id, order in order_dict.items()],
+                    else_=None,
+                )
+            )
         )
 
         result = session.execute(query)

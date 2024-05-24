@@ -64,8 +64,8 @@ async def get_categories():
 
 
 @app.get("/reco-product")
-async def get_recommended_products():
-    result = await home_util.get_recommended_products()
+async def get_recommended_products(user_id: int):
+    result = await home_util.get_recommended_products(user_id)
 
     if result is None:
         return Response(status_code=404)
