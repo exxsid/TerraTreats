@@ -8,7 +8,13 @@ from utils import parcel_util
 from utils import authentication as auth
 from utils import home_util, cart_util, search_util
 from models.api_base_model import Login, PlaceOrder, Signup, AddToCart
-from router import deliver_schedule, my_orders, my_products_router, review_router, chat_router
+from router import (
+    deliver_schedule,
+    my_orders,
+    my_products_router,
+    review_router,
+    chat_router,
+)
 
 app = FastAPI()
 
@@ -18,7 +24,7 @@ def get_users():
     return auth.get_users()
 
 
-@app.post('/login')
+@app.post("/login")
 async def user_login(credentials: Login):
     result = await auth.login_user(credentials)
     if result is None:
@@ -27,7 +33,7 @@ async def user_login(credentials: Login):
         return response
 
     response = JSONResponse(content=jsonable_encoder(result))
-    response.set_cookie(key="user_id", value=result['id'], secure=True)
+    response.set_cookie(key="user_id", value=result["id"], secure=True)
     response.status_code = 201
     return response
 
@@ -75,6 +81,7 @@ async def get_product_by_id(id: int):
 
     return result
 
+
 @app.get("/cat-product")
 async def get_product_by_category(category: str):
     result = await home_util.get_product_by_category(category)
@@ -84,9 +91,10 @@ async def get_product_by_category(category: str):
 
     return result
 
+
 @app.get("/featured-product")
-async def get_featured_product():
-    result = await home_util.get_featured_product()
+async def get_featured_product(zip_code: str):
+    result = await home_util.get_featured_product(zip_code)
 
     if result is None:
         return Response(status_code=404)
@@ -131,44 +139,49 @@ async def add_order(place_order: PlaceOrder):
 
     if result is False:
         return Response(status_code=400)
-    
+
     return Response(status_code=201)
+
 
 @app.get("/to-pay")
 async def get_to_pay_price(user_id: int):
     result = await parcel_util.get_to_pay_parcel(user_id)
-    
+
     if result is False:
         return Response(status_code=400)
 
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
+
 
 @app.get("/to-ship")
 async def get_to_ship_parcel(user_id: int):
     result = await parcel_util.get_to_ship_parcel(user_id)
-    
+
     if result is False:
         return Response(status_code=400)
 
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
+
 
 @app.get("/to-deliver")
 async def get_to_deliver_parcel(user_id: int):
     result = await parcel_util.get_to_deliver_parcel(user_id)
-    
+
     if result is False:
         return Response(status_code=400)
 
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
+
 
 @app.get("/to-review")
 async def get_to_review_parcel(user_id: int):
     result = await parcel_util.get_to_review_parcel(user_id)
-    
+
     if result is False:
         return Response(status_code=400)
 
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
+
 
 @app.get("/search")
 async def search_product(search_str: str):
@@ -178,6 +191,7 @@ async def search_product(search_str: str):
         return Response(status_code=404)
 
     return result
+
 
 # @app.websocket("/ws")
 # async def chat(websocket: WebSocket):

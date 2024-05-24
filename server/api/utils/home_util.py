@@ -120,44 +120,67 @@ async def get_product_by_id(id: int):
     return res
 
 
-async def get_featured_product():
+async def get_featured_product(zip_code: str):
     with Session(engine) as session:
 
         sellers = (
             session.query(Seller.id)
             .select_from(Seller)
             .join(Address, Seller.user_id == Address.user_id)
-            .where(Address.postal_code == "2515")
+            .where(Address.postal_code == zip_code)
             .all()
         )
         num_sellers = len(sellers)
 
-        rand_index = random.randrange(0, num_sellers - 1)
-
-        selected_seller = sellers[rand_index][0]
-
-        query = (
-            select(
-                Product.product_id,
-                Product.product_name,
-                Product.description,
-                Product.price,
-                Product.stock,
-                Product.unit,
-                Product.image_url,
-                Product.rating,
-                Category.category_name,
-                User.first_name,
-                User.last_name,
-                Product.sold,
+        if num_sellers <= 0:
+            query = (
+                select(
+                    Product.product_id,
+                    Product.product_name,
+                    Product.description,
+                    Product.price,
+                    Product.stock,
+                    Product.unit,
+                    Product.image_url,
+                    Product.rating,
+                    Category.category_name,
+                    User.first_name,
+                    User.last_name,
+                    Product.sold,
+                )
+                .select_from(Product)
+                .join(Category, Product.category_id == Category.category_id)
+                .join(Seller, Product.seller_id == Seller.id)
+                .join(User, Seller.user_id == User.id)
+                .limit(1)
             )
-            .select_from(Product)
-            .join(Category, Product.category_id == Category.category_id)
-            .join(Seller, Product.seller_id == Seller.id)
-            .join(User, Seller.user_id == User.id)
-            .where(Seller.id == selected_seller)
-            .limit(1)
-        )
+        else:
+            rand_index = random.randrange(0, num_sellers)
+
+            selected_seller = sellers[rand_index][0]
+
+            query = (
+                select(
+                    Product.product_id,
+                    Product.product_name,
+                    Product.description,
+                    Product.price,
+                    Product.stock,
+                    Product.unit,
+                    Product.image_url,
+                    Product.rating,
+                    Category.category_name,
+                    User.first_name,
+                    User.last_name,
+                    Product.sold,
+                )
+                .select_from(Product)
+                .join(Category, Product.category_id == Category.category_id)
+                .join(Seller, Product.seller_id == Seller.id)
+                .join(User, Seller.user_id == User.id)
+                .where(Seller.id == selected_seller)
+                .limit(1)
+            )
 
         col = session.execute(query).fetchone()
 
