@@ -32,6 +32,11 @@ async def update_my_products(updated_product: MyProduct):
 async def add_my_product(new_product: NewProduct):
     result = await mpu.add_product(new_product)
 
+
+@router.delete("/my-products")
+async def delete_product(product_id: int):
+    result = await mpu.delete_product(product_id)
+
     if result is False:
         return Response(status_code=400)
 

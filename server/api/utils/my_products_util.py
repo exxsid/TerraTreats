@@ -180,6 +180,33 @@ async def add_product(new_product: NewProduct):
         return False
 
 
+async def delete_product(product_id: int):
+    try:
+        with Session(engine) as session:
+            # delete the image in cloudinary
+            old_img_url = session.execute(
+                session.query(Product.image_url)
+                .select_from(Product)
+                .filter(Product.product_id == product_id)
+            ).first()
+
+            public_id = extract_cloudinary_id(old_img_url[0])
+            cs.delete_image(public_id)
+
+            delete_statement = delete(Product).where(Product.product_id == product_id)
+
+            print(f"DLETE stmt: {delete_statement}")
+
+            session.execute(delete_statement)
+
+            session.commit()
+            return True
+    except Exception as e:
+        print(f"DELETE PRODUCT: {e}")
+        session.rollback()
+        return False
+
+
 def convert_base64string_to_bytearray(base64_string):
     try:
         decoded_bytes = base64.b64decode(base64_string)
