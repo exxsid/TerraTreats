@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:terratreats/models/product_model.dart';
+import 'package:terratreats/screens/account/add_product_screen.dart';
 import 'package:terratreats/screens/account/edit_my_products_screen.dart';
 import 'package:terratreats/services/seller/my_products_service.dart';
+import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/widgets/appbar.dart';
 import 'package:terratreats/widgets/product_card.dart';
 
@@ -18,11 +21,36 @@ class _MyProducstScreenState extends ConsumerState<MyProducstScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar.customAppBar(title: "My Products"),
-      body: RefreshIndicator(
-        child: myProducts(),
-        onRefresh: () async {
-          setState(() {});
-        },
+      body: Stack(
+        children: [
+          RefreshIndicator(
+            child: myProducts(),
+            onRefresh: () async {
+              setState(() {});
+            },
+          ),
+          Positioned(
+            right: 16,
+            bottom: 16,
+            child: FloatingActionButton(
+              backgroundColor: AppTheme.primary,
+              child: Icon(
+                Ionicons.add_outline,
+                color: Colors.white70,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AddProductScreen();
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

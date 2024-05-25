@@ -52,3 +52,42 @@ Future<bool> updateMyProduct({required MyProductModel product}) async {
     throw Exception("Can't update product");
   }
 }
+
+Future<bool> addMyProduct({
+  required String productName,
+  required double price,
+  required String unit,
+  required String image,
+  required String description,
+  required int stock,
+  required double shippingFee,
+  required String category,
+}) async {
+  final uri = Uri.parse("$baseUrl/my-products");
+
+  final response = await http.post(
+    uri,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(
+      <String, dynamic>{
+        "seller_id": Token.getUserToken(),
+        "name": productName,
+        "description": description,
+        "price": price,
+        "stock": stock,
+        "unit": unit,
+        "image": image,
+        "category": category,
+        "shipping_fee": shippingFee,
+      },
+    ),
+  );
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    throw Exception("Can't add the product");
+  }
+}

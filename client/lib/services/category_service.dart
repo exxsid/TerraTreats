@@ -3,6 +3,7 @@ import 'package:terratreats/riverpod/categorycard_notifier.dart';
 import "package:flutter_dotenv/flutter_dotenv.dart";
 import "dart:convert";
 import "package:http/http.dart" as http;
+import "package:terratreats/utils/preferences.dart";
 
 final baseUrl = dotenv.env["BASE_URL"];
 
@@ -20,7 +21,8 @@ Future<List<CategoryCardItem>> getCategory() async {
 }
 
 Future<List<dynamic>> getProductsByCategory(String category) async {
-  final uri = Uri.parse("$baseUrl/cat-product?category=$category");
+  final uri = Uri.parse(
+      "$baseUrl/cat-product?category=$category&user_id=${Token.getUserToken()}");
 
   final response = await http.get(uri);
 
