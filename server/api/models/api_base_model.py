@@ -32,10 +32,12 @@ class PlaceOrder(BaseModel):
     quantity: int
     order_size: str
 
+
 class Schedule(BaseModel):
     seller_id: int
     schedule: str
-    
+
+
 class MyProduct(BaseModel):
     product_id: int
     name: str
@@ -46,18 +48,32 @@ class MyProduct(BaseModel):
     image: str | None
     category: str
     shipping_fee: float
-    
+
+
+class NewProduct(BaseModel):
+    seller_id: int
+    name: str
+    description: str
+    price: float
+    stock: int
+    unit: str
+    image: str
+    category: str
+    shipping_fee: float
+
+
 class Review(BaseModel):
     user_id: int
     product_id: int
     rating: float
     message: str
     order_id: int
-    
+
 
 class ChatHistory(BaseModel):
     chat_id: str
-    
+
+
 class SendChat(BaseModel):
     chat_id: str | None
     sender_id: int
