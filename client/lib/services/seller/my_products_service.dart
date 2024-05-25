@@ -91,3 +91,15 @@ Future<bool> addMyProduct({
     throw Exception("Can't add the product");
   }
 }
+
+Future<bool> deleteProduct(int productId) async {
+  final uri = Uri.parse("$baseUrl/my-products?product_id=$productId");
+
+  final response = await http.delete(uri);
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    throw Exception("Can't delete product");
+  }
+}

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:terratreats/models/my_product_model.dart';
 
 import 'package:terratreats/models/product_model.dart';
@@ -40,7 +41,17 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar.customAppBar(title: "My Product"),
+      appBar: AppBar(
+        title: Text("My Products"),
+        actions: [
+          IconButton(
+            icon: Icon(Ionicons.trash_bin_outline),
+            onPressed: () {
+              deleteAlertDialog(context);
+            },
+          ),
+        ],
+      ),
       body: Container(
         child: FutureBuilder(
           future: getSelectedProduct(widget.productId),
@@ -166,6 +177,45 @@ class _MyProductsState extends ConsumerState<EditMyProducts> {
           },
         ),
       ),
+    );
+  }
+
+  Future<dynamic> deleteAlertDialog(BuildContext screenContext) {
+    return showDialog(
+      context: screenContext,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Delete Product"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                Text("Are you sure you wanted to delete this product?"),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text("No"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: const Text(
+                "Delete",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () async {
+                await deleteProduct(widget.productId);
+                const snackBar =
+                    SnackBar(content: Text("Successfully deleted the product"));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                Navigator.pop(screenContext);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
