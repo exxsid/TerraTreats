@@ -80,7 +80,7 @@ class ConnectionManager:
         await self.store_message(chat)
 
     async def store_message(self, chat: SendChat):
-        if chat.chat_id == None:
+        if len(chat.chat_id) == 0:
             chat_doc = None
         else:
             chat_doc = await self.db.chat.find_one({"_id": ObjectId(chat.chat_id)})
@@ -116,7 +116,7 @@ class ConnectionManager:
     async def chat_messages(self, user_id: int):
         # to be more efficient, retrieving of chats include only
         # _id and participants
-        filter = {"_id": 1, "participants": 1}
+        filter = {"participants": user_id}
         chat_doc = await self.chat.find({"participants": user_id}, filter).to_list(
             length=None
         )

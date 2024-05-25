@@ -100,7 +100,7 @@ async def get_product_by_id(id: int):
                 User.last_name,
                 Product.sold,
                 Product.shipping_fee,
-                Seller.id,
+                User.id,
             )
             .select_from(Product)
             .join(Category, Product.category_id == Category.category_id)
@@ -133,6 +133,7 @@ async def get_product_by_id(id: int):
             "seller": f"{col[9]} {col[10]}",
             "sold": col[11],
             "shipping_fee": col[12],
+            "user_id": col[13],
             "schedule": [sched[0] for sched in result_schedule],
         }
 
