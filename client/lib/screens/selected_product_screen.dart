@@ -2,8 +2,10 @@ import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:terratreats/riverpod/chat_notifier.dart";
 import "package:terratreats/riverpod/navigation_notifier.dart";
 import "package:terratreats/riverpod/selected_product_notifier.dart";
+import "package:terratreats/screens/chat/chat_screen.dart";
 import "package:terratreats/screens/place_order_screen.dart";
 import "package:terratreats/screens/reviews_screen.dart";
 import "package:terratreats/services/reviews_service.dart";
@@ -160,7 +162,23 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                         child: IconButton(
                             icon: Icon(Ionicons.chatbubble_outline),
                             onPressed: () {
-                              print("cart pressed");
+                              ref
+                                  .read(chatChangeNotifierProvider.notifier)
+                                  .updateRecipient(data.seller);
+                              ref
+                                  .read(chatChangeNotifierProvider.notifier)
+                                  .updateRecipientId(data.sellerId!);
+                              ref
+                                  .read(chatChangeNotifierProvider.notifier)
+                                  .updateChatId("");
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ChatScreen();
+                                  },
+                                ),
+                              );
                             }),
                       ),
                       SizedBox(width: 8),

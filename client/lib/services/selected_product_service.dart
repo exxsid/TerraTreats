@@ -23,6 +23,7 @@ Future<Product> getSelectedProduct(int id) async {
       rating: json['rating'] as double,
       category: json['category'] as String,
       seller: json['seller'] as String,
+      sellerId: json['user_id'] as int,
       sold: json['sold'] as int,
       shippingFee: json['shipping_fee'] as double,
       deliverySchedules: json['schedule'] as List<dynamic>,
