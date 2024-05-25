@@ -103,7 +103,7 @@ async def update_my_products(updated_product: MyProduct):
                 .select_from(Product)
                 .filter(Product.product_id == updated_product.product_id)
             ).first()
-            public_id = extract_cloudinary_id(old_img_url)
+            public_id = extract_cloudinary_id(old_img_url[0])
             cs.delete_image(public_id)
 
             # upload the new image
