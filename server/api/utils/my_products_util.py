@@ -154,7 +154,7 @@ async def add_product(new_product: NewProduct):
                 .filter(Category.category_name == new_product.category)
             ).first()
 
-            image = convert_base64string_to_bytearray(updated_product.image)
+            image = convert_base64string_to_bytearray(new_product.image)
 
             img_url = cs.upload_image(image, seller_id[0][0])
 
