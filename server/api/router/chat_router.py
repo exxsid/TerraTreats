@@ -97,7 +97,13 @@ class ConnectionManager:
             )
 
             await self.chat.update_one(
-                {"_id": chat_doc["_id"]}, {"$set": {"messages": chat_doc["messages"]}}
+                {"_id": chat_doc["_id"]},
+                {
+                    "$set": {
+                        "messages": chat_doc["messages"],
+                        "latest_timestamp": datetime.now(),
+                    }
+                },
             )
         else:
             chat_doc = {
