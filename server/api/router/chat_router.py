@@ -116,7 +116,7 @@ class ConnectionManager:
     async def chat_messages(self, user_id: int):
         # to be more efficient, retrieving of chats include only
         # _id and participants
-        filter = {"participants": user_id}
+        filter = {"_id": 1, "participants": 1, "latest_timestamp": 1}
         chat_doc = await self.chat.find({"participants": user_id}, filter).to_list(
             length=None
         )
@@ -125,6 +125,11 @@ class ConnectionManager:
             return []
 
         result = []
+
+        print(f"CCHHHAAATTT {chat_doc}")
+        chat_doc = sorted(
+            chat_doc, key=lambda msg: msg["latest_timestamp"], reverse=True
+        )
         # get the recipient name
         for chat in chat_doc:
             recipient_id = (
