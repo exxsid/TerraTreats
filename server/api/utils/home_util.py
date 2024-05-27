@@ -101,6 +101,7 @@ async def get_product_by_id(id: int):
                 Product.sold,
                 Product.shipping_fee,
                 User.id,
+                Seller.id,
             )
             .select_from(Product)
             .join(Category, Product.category_id == Category.category_id)
@@ -131,6 +132,7 @@ async def get_product_by_id(id: int):
             "rating": col[7],
             "category": col[8],
             "seller": f"{col[9]} {col[10]}",
+            "seller_id": col[14],
             "sold": col[11],
             "shipping_fee": col[12],
             "user_id": col[13],
