@@ -79,3 +79,20 @@ class SendChat(BaseModel):
     sender_id: int
     recipient_id: int
     message: str
+
+
+class NewName(BaseModel):
+    user_id: int
+    first_name: str
+    last_name: str
+
+
+class NewAddress(BaseModel):
+    user_id: int
+    street: str | None
+    barangay: str
+    city: str
+    province: str
+    zip_code: str
+    latitude: float
+    longitude: float
