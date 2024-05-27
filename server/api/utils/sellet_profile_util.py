@@ -2,7 +2,7 @@ import random
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, select
 
-from models.models import Category, Product, Seller, User
+from models.models import Category, Product, Seller, User, Address
 from recommender_system import recommender as rs
 
 engine = engine = create_engine(
@@ -12,9 +12,35 @@ engine = engine = create_engine(
 
 async def get_seller_profile(seller_id: int):
     with Session(engine) as session:
-        seller = session.query(Seller).where(Seller.id == seller_id).first()
+        seller = session.execute(
+            select(
+                Seller.id,
+                User.first_name,
+                User.last_name,
+                Address.street,
+                Address.barangay,
+                Address.city,
+                Address.province,
+                Address.postal_code,
+                Seller.description,
+                Seller.is_verified,
+            )
+            .select_from(Seller)
+            .join(User, Seller.user_id == User.id)
+            .join(Address, User.id == Address.user_id)
+            .where(Seller.id == seller_id)
+        ).all()
 
-        return seller
+        for col in seller:
+            result = {
+                "seller_id": col[0],
+                "name": f"{col[1]} {col[2]}",
+                "address": f"{col[3]}, {col[4]}, {col[5]}, {col[6]}, {col[7]}",
+                "description": col[8],
+                "is_verified": col[9],
+            }
+
+        return result
 
 
 async def get_seller_products(seller_id: int):
