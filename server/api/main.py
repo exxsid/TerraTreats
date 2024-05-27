@@ -15,6 +15,7 @@ from router import (
     review_router,
     chat_router,
     edit_account_info_router,
+    sell_in_terratreats_router,
 )
 
 app = FastAPI()
@@ -227,3 +228,4 @@ app.include_router(my_products_router.router)
 app.include_router(review_router.router)
 app.include_router(chat_router.router)
 app.include_router(edit_account_info_router.router)
+app.include_router(sell_in_terratreats_router.router)
