@@ -15,6 +15,8 @@ import "package:terratreats/screens/feedback_screen.dart";
 import "package:terratreats/screens/login.dart";
 import "package:terratreats/screens/my_parcel_screen.dart";
 import "package:terratreats/screens/account/edit_my_products_screen.dart";
+import "package:terratreats/screens/sell_in_terratreats_screen.dart";
+import "package:terratreats/services/authentication/auth_service.dart";
 import "package:terratreats/services/order_service.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/utils/preferences.dart";
@@ -27,53 +29,56 @@ class Account extends ConsumerStatefulWidget {
 }
 
 class _AccountState extends ConsumerState<Account> {
-  late bool _isSeller;
-
-  @override
-  void initState() {
-    super.initState();
-    _isSeller = Token.getIsSellerToken()!;
-  }
-
   @override
   Widget build(BuildContext context) {
+    bool isSeller = Token.getIsSellerToken()!;
     return Container(
       height: double.infinity,
       color: AppTheme.highlight,
       padding: EdgeInsets.all(8),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            profileCard(),
-            const SizedBox(height: 16),
-            myParcelCard(),
-            const SizedBox(height: 16),
-            accountButton(
-              title: const Text("Account Information"),
-              onTap: () {
-                Navigator.push(
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await AuthService()
+              .login(Token.getEmailToken()!, Token.getPasswordToken()!);
+          setState(() {});
+        },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              profileCard(),
+              const SizedBox(height: 16),
+              myParcelCard(),
+              const SizedBox(height: 16),
+              accountButton(
+                title: const Text("Account Information"),
+                onTap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const AccountInformation()));
-              },
-            ),
-            const SizedBox(height: 4),
-            accountButton(
-              title: const Text("Feedback"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return UserFeedback();
-                  }),
-                );
-              },
-            ),
-            (_isSeller ? sellerAccountButtons() : notSellerAccountButtons()),
-            const SizedBox(height: 16),
-            logoutButton(context),
-          ],
+                      builder: (context) => const AccountInformation(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 4),
+              accountButton(
+                title: const Text("Feedback"),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return UserFeedback();
+                    }),
+                  );
+                },
+              ),
+              (isSeller ? sellerAccountButtons() : notSellerAccountButtons()),
+              const SizedBox(height: 16),
+              logoutButton(context),
+            ],
+          ),
         ),
       ),
     );
@@ -128,7 +133,19 @@ class _AccountState extends ConsumerState<Account> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 4),
-        accountButton(title: const Text("Sell in TerraTreats"), onTap: () {}),
+        accountButton(
+          title: const Text("Sell in TerraTreats"),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return SellInTerraTreatsScreen();
+                },
+              ),
+            );
+          },
+        ),
       ],
     );
   }
