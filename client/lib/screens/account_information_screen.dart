@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:terratreats/riverpod/edit_account_info_notifier.dart';
+import 'package:terratreats/screens/account/edit_account_info_screen.dart';
 import 'package:terratreats/utils/app_theme.dart';
 import 'package:terratreats/utils/preferences.dart';
 
@@ -64,51 +66,59 @@ class _AccountInformationState extends ConsumerState<AccountInformation> {
     required String value,
   }) {
     return InkWell(
-      child: Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 2,
-              spreadRadius: 0.5,
-            )
-          ],
-          color: AppTheme.highlight,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: AppTheme.primary,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+        child: Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 2,
+                spreadRadius: 0.5,
+              )
+            ],
+            color: AppTheme.highlight,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  color: AppTheme.primary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            Row(
-              children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                    color: AppTheme.secondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+              Row(
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(
+                      color: AppTheme.secondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Icon(
-                  FeatherIcons.chevronRight,
-                  color: AppTheme.secondary,
-                )
-              ],
-            )
-          ],
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Icon(
+                    FeatherIcons.chevronRight,
+                    color: AppTheme.secondary,
+                  )
+                ],
+              )
+            ],
+          ),
         ),
-      ),
-    );
+        onTap: () {
+          ref.read(editAccountInfoNotifierProvider.notifier).updateInfo(title);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditAccountInfoScreen(),
+            ),
+          );
+        });
   }
 }
