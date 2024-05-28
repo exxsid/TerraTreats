@@ -97,7 +97,7 @@ class _MyParcelState extends State<MyParcel> {
         decoration: const BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.blueGrey,
+              color: Color.fromARGB(255, 165, 172, 175),
               blurRadius: 2,
               spreadRadius: 1,
             ),
