@@ -23,39 +23,44 @@ class Home extends ConsumerStatefulWidget {
 class _HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            generateFeaturedProduct(),
-            SizedBox(
-              height: 24,
-            ),
-            Text(
-              "Categories",
-              style: TextStyle(
-                color: AppTheme.primary,
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              generateFeaturedProduct(),
+              SizedBox(
+                height: 24,
               ),
-            ),
-            CategoryCard(),
-            SizedBox(
-              height: 24,
-            ),
-            Text(
-              "Recommended Products",
-              style: TextStyle(
-                color: AppTheme.primary,
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
+              Text(
+                "Categories",
+                style: TextStyle(
+                  color: AppTheme.primary,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            populateRecommendedProducts(),
-          ],
+              CategoryCard(),
+              SizedBox(
+                height: 24,
+              ),
+              Text(
+                "Recommended Products",
+                style: TextStyle(
+                  color: AppTheme.primary,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
+              ),
+              populateRecommendedProducts(),
+            ],
+          ),
         ),
       ),
     );
