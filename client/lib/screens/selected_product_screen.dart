@@ -8,6 +8,7 @@ import "package:terratreats/riverpod/selected_product_notifier.dart";
 import "package:terratreats/screens/chat/chat_screen.dart";
 import "package:terratreats/screens/place_order_screen.dart";
 import "package:terratreats/screens/reviews_screen.dart";
+import "package:terratreats/screens/seller_profile_screen.dart";
 import "package:terratreats/services/reviews_service.dart";
 import "package:terratreats/utils/app_theme.dart";
 import "package:terratreats/services/selected_product_service.dart";
@@ -96,11 +97,24 @@ class _SelectedProductState extends ConsumerState<SelectedProduct> {
                               ),
                             ],
                           ),
-                          Text(
-                            "${data.seller}",
-                            style: TextStyle(
-                              color: AppTheme.secondary,
-                              fontSize: 15,
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (content) {
+                                    return SellerProfileScreen(
+                                        sellerId: data.sellerId!);
+                                  },
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "${data.seller}",
+                              style: TextStyle(
+                                color: AppTheme.secondary,
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                           Text(
