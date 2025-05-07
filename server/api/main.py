@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 import json
 from fastapi.encoders import jsonable_encoder
 import uuid
+from fastapi.middleware.cors import CORSMiddleware
 
 from utils import parcel_util
 from utils import authentication as auth
@@ -20,6 +21,14 @@ from router import (
 )
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
 
 
 @app.get("/")
